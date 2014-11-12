@@ -5,6 +5,7 @@
 
  .thumbnail {
  	height: 644px;
+ 	min-width: 273px;
  }
 
 .thumbnail .caption {
