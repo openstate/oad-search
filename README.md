@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Demo Angular script, build on the PHP script of the Open Cultuur Data Restful API. Basic search on _open cultuur data_ containing at least 1 image, displayed as a thumbnail gallery.
+Demo Angular script, uses the OCD PHP script to communicate with the the Open Cultuur Data Restful API. Basic search on _open cultuur data_ containing at least 1 image, displayed as a thumbnail gallery.
 
 ## Documentation
 
@@ -10,16 +10,13 @@ The documentation of the Open Cultuur API can be found at [docs.opencultuurdata.
 
 ## Installation
 
-Install index.php and bootswatch.css on a webserver which runs PHP and libcurl.
-
-## Demo
-
-Live version can be viewed at [search.opencultuurdata.nl](http://search.opencultuurdata.nl/).
+plcae contains on a webserver which runs PHP and libcurl.
 
 ## Authors
 
 * OpenCultuurData ([@OpenCultuurData](https://twitter.com/OpenCultuurData))
 * Frank Sträter([@frankstrater](https://twitter.com/frankstrater))
+* Tim Meerhof
 
 ## Copyright and license
 

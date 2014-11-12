@@ -4,14 +4,14 @@ var OCDAppCtrl = angular.module('OCDAppControllers', ['OCDAppServices']);
 OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 	function ($scope, QueryService) {
 	
-		
+		//get the data from the Queryservice
 		data = QueryService.getData();
-
 		console.log(data);
+		
 		$scope.facets = data.queryData.facets.collection.terms;
 		$scope.results =  data.queryData.results;
 
-		//set the paginator.
+		//build a array of options for the paginator.
 		var start_pagination = ((Math.ceil(data.page / 6) - 1) * 6) + 1;
 		var end_pagination = start_pagination + 5;
 
@@ -42,8 +42,8 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 		$scope.paginator = pagelist;
 
 
-		//ask the service for a page
-		$scope.getPage = function(){
+		//ask the service to move to a new page.
+		$scope.moveToPage = function(){
 			QueryService.getPage(this.page.pagenum);
 		};
 
@@ -89,12 +89,12 @@ OCDAppCtrl.controller('ItemCtrl', ['$scope',
 	}]);
 
 //this controller controlls the navbar.
-OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService', '$routeParams',
-	function ($scope, $location, QueryService, $route) {
+OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService',
+	function ($scope, $location, QueryService) {
 
 		$scope.query = "";
 
-		//the Navbar renders a before the querypage, so it needs to listen for a new query.
+		//the Navbar renders a before the router, so it needs to listen for a new query.
 		//if QueryService broadcasts a new query, update the query in the navbar
 		$scope.$on('New Query', function (event, data) {
 			$scope.query = data.query;
@@ -104,6 +104,7 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService', '$ro
 		$scope.search = function(){
 			$location.path( 'query/'+$scope.query+'/page/1' );
 		};
+
 
 		$scope.suggest = function(){
 			//TODO create suggest function.

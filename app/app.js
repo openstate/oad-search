@@ -1,11 +1,11 @@
-
-
+//define youre app and declare dependencies
 var OCDApp = angular.module('OCDApp', [
-	'ngRoute',
-  'OCDAppServices',
-  'OCDAppControllers'
+	'ngRoute',           //routes used below
+  'OCDAppServices',    //our services
+  'OCDAppControllers'  //our controlers
 ]);
 
+//the routeprovider is responcible for the url management.
 OCDApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -15,13 +15,12 @@ OCDApp.config(['$routeProvider',
       when('/query/:q/page/:page',  {
         templateUrl: 'app/partials/query.html',
         controller: 'queryCtrl',
+        //if you define a resolve, the routeProvider will wait till till all promises defined here
+        //are resolved before updating the route and the data. This makes the transions smoother.
         resolve:{
-          //if you define a resolve, the routeProvider wil wait till the resolve is finished
-          //before updating the route and the data. This makes the transions smoother
-          data:['$route' , 'QueryService', function($route, QueryService) {
-            console.log($route.current.params);
-            var queryPromise = QueryService.getNewApiData($route.current.params.q, $route.current.params.page);
-            console.log(queryPromise);
+          getData:['$route' , 'QueryService', function($route, QueryService) {
+            //the Queryservice is our own service, responcible for communicating with the OCD API. 
+            var queryPromise = QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page);
             return queryPromise;
           }]
         }
@@ -32,12 +31,3 @@ OCDApp.config(['$routeProvider',
 
 
   }]);
-
-    /*,
-        resolve:{
-          data:["QueryService", function(QueryService) {
-
-          }];*/
-
-
-
