@@ -142,7 +142,9 @@ if ($q) {
             if ($count_pages > 0) {
    
                 // Facets collection
-
+                echo'<pre>';
+                print_r($results);
+                echo'</pre>';
                 echo '<ul id="facets" class="list-group">' . PHP_EOL;
 
                 //foreach ($array_search['facets']['collection']['terms'] as $item) {

@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Demo PHP script of the Open Cultuur Data Restful API. Basic search on _open cultuur data_ containing at least 1 image, displayed as a thumbnail gallery.
+Demo Angular script, build on the PHP script of the Open Cultuur Data Restful API. Basic search on _open cultuur data_ containing at least 1 image, displayed as a thumbnail gallery.
 
 ## Documentation
 

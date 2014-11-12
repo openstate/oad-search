@@ -1,0 +1,33 @@
+ body {
+ 	padding-top: 70px;
+ 	padding-bottom: 70px;
+ }
+
+ .thumbnail {
+ 	height: 644px;
+ }
+
+.thumbnail .caption {
+ 	padding: 0px 0px;
+ }
+
+ .thumb-image {
+ 	display: block;
+ 	height: 400px;
+ 	background-repeat: no-repeat;
+ 	background-position: center center;
+ 	background-size: cover;
+ }
+
+ .thumb-body {
+ 	padding: 0px 9px;
+ 	height: 160px;
+ 	overflow: auto;
+ }
+
+ .thumb-footer {
+ 	padding: 0px 9px;
+ 	position:absolute;
+ 	bottom:30px;
+ 	line-height: 1;
+ }

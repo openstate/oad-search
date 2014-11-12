@@ -1,0 +1,55 @@
+<div class="container-fluid">
+  <div class="col-xs-2" style="background-color:#eee;">
+    <form class="form" role="form" ng-submit="onFormSubmit()">
+      <h3 class="demo-panel-title">Indexes</h3>
+      <div ng-repeat="facet in facets">
+        <label class="checkbox" for="checkbox1">
+          <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" checked="checked">
+          {{facet.term}} <small>({{facet.count}})</small>
+        </label>
+      </div>
+    </form>
+  </div>
+  
+
+
+  <!--the actual body of the page -->
+  <div class="col-xs-9">
+
+    <!--display the firts paginator-->
+    <div class="text-center">
+      <ul class="pagination">
+        <li ng-repeat="page in paginator" class="{{page.class}}"  ><a href="" ng-click="getPage()">{{page.text}}</a></li>
+      </ul>
+    </div>
+
+    <!--display the results -->
+    <div ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4">
+      <div class="thumbnail" >
+        <a href="http://api.opencultuurdata.nl/v0/resolve/0fcbd6e78239c93bf9c08c8418e1a89499f06bff" class="thumb-image" style="background-image: url({{imgurl}})"></a>
+        <div class="caption">
+          <div class="thumb-body"> 
+            <h4>{{title}}</h4>
+            <p>{{author}} {{date}}</p>
+            <p>{{rights}}</p>
+          </div>
+          <div class="thumb-footer">  
+            <hr>
+            <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
+            <p><small><a href="{{apiUrl}}">{{apiId}}</a></small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--the pagenation -->
+    <div class="text-center">
+      <ul class="pagination">
+        <li ng-repeat="page in paginator" class="{{page.class}}"  ><a href="" ng-click="getPage()">{{page.text}}</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+</div>
+

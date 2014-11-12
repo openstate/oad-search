@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" ng-app="OCDApp">
+<head>
+
+  <title>OCD search</title>
+
+  <!--Include all the bower dependencies from the bower folder-->
+  <script src="app/bower_components/angular/angular.js"></script>
+  <script src="app/bower_components/angular-route/angular-route.js"></script>
+  <link rel="stylesheet" type="text/css" href="app/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+   <!--Include youre own files-->
+  <link rel="stylesheet" type="text/css" href="app/css/bootswatch.css">
+  <link rel="stylesheet" type="text/css" href="app/css/my.css">
+
+  <script src="app/js/services.js"></script>
+  <script src="app/js/controllers.js"></script>
+  <script src="app/app.js"></script>
+
+</head>
+
+<body>
+
+  <!--include the navbar-->
+  <div ng-include="'app/partials/nav.html'"></div>
+
+  <!--ng-view is the place angular renders the router template-->
+  <div ng-view></div>
+
+</body>
+</html>
+
+</body>
+</html>
