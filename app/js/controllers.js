@@ -44,7 +44,7 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 
 		//ask the service to move to a new page.
 		$scope.moveToPage = function(){
-			QueryService.getPage(this.page.pagenum);
+			QueryService.moveToPage(this.page.pagenum);
 		};
 
 	}]);
