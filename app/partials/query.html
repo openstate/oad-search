@@ -11,16 +11,23 @@
     </form>
   </div>
   
-
-
   <!--the actual body of the page -->
-  <div class="col-xs-9">
-
+  <div class="col-xs-10">
     <!--display the firts paginator-->
     <div class="text-center">
       <ul class="pagination">
         <li ng-repeat="page in paginator" class="{{page.class}}"  ><a href="" ng-click="moveToPage()">{{page.text}}</a></li>
       </ul>
+    </div>
+
+    <div class="text-center">
+      <div class="modal-dialog" ng-show="loadingView">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">loading...</h4> 
+          </div>
+        </div>
+      </div> 
     </div>
 
     <!--display the results -->
@@ -40,6 +47,16 @@
           </div>
         </div>
       </div>
+    </div>
+    
+    <div class="text-center">
+      <div class="modal-dialog modal-dialog-bottom" ng-show="loadingView">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">loading...</h4> 
+          </div>
+        </div>
+      </div> 
     </div>
 
     <!--the pagenation -->

@@ -8,7 +8,7 @@
  	min-width: 273px;
  }
 
-.thumbnail .caption {
+ .thumbnail .caption {
  	padding: 0px 0px;
  }
 
@@ -32,3 +32,20 @@
  	bottom:30px;
  	line-height: 1;
  }
+
+ .modal{
+ 	display:block;
+ }
+
+ .modal-dialog {
+ 	position: absolute;
+ 	width: 110px;
+	margin: 50px auto;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+ }
+
+.modal-dialog-bottom {
+	bottom: 50px;
+}

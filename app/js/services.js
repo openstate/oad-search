@@ -16,6 +16,15 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location',
 		queryService.httpGetNewOCDData = function(newQuery, newPage, newOptions){
 
 			var promise = $http.get('php/resultjson.php', {params:{q:newQuery, page:newPage, options:newOptions}} ).success(function(data) {
+				
+				if(data.error){
+					console.log("phperror");
+					console.log(data.error);
+					alert("Error: php-failed");
+					queryData = false;
+					return;
+				}
+
 				queryData = data;
 				query = newQuery;
 				page = newPage;
@@ -33,13 +42,15 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location',
 
 		//return the data.
 		queryService.getData = function(){
-			return {
-				queryData: queryData,
-				query: query,
-				page: page,
-				options: options
-			};
-
+			if(queryData){
+				return {
+					queryData: queryData,
+					query: query,
+					page: page,
+					options: options
+				};
+			}else
+				return false;
 		};
 
 		//move to the requested page.

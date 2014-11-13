@@ -264,9 +264,11 @@ class Ocd implements Iterator {
         $result = $this->rest($op, "POST", json_encode($data));
         //var_dump($result);
         $json = json_decode($result, TRUE);
-        if (@$json['status'] == "error") {
+
+        if (isset($json['status']) && @$json['status'] == "error") {
             throw new Exception($json['error']);
         }
+        
         $this->page = $json;
         return TRUE;
     }

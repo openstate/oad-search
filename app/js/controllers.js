@@ -3,55 +3,65 @@ var OCDAppCtrl = angular.module('OCDAppControllers', ['OCDAppServices']);
 //this controlls the query screen
 OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 	function ($scope, QueryService) {
-	
+
 		//get the data from the Queryservice
 		data = QueryService.getData();
 		console.log(data);
-		
-		$scope.facets = data.queryData.facets.collection.terms;
-		$scope.results =  data.queryData.results;
-
-		//build a array of options for the paginator.
-		var start_pagination = ((Math.ceil(data.page / 6) - 1) * 6) + 1;
-		var end_pagination = start_pagination + 5;
-
-		if (end_pagination > data.queryData.pages) {
-			end_pagination = data.queryData.pages;
+		if(data){
+			$scope.facets = data.queryData.facets.collection.terms;
+			$scope.results =  data.queryData.results;
+			updatepaginator();
 		}
 
-		var pagelist = [{
-			class: (start_pagination == 1) ? "disabled" : "",
-			pagenum: start_pagination - 1,
-			text:"<<"
-		}];
-		
-		for(var i = start_pagination; i <= end_pagination; i++){
+		function updatepaginator(){
+			//build a array of options for the paginator.
+			var start_pagination = ((Math.ceil(data.page / 6) - 1) * 6) + 1;
+			var end_pagination = start_pagination + 5;
+
+			if (end_pagination > data.queryData.pages) {
+				end_pagination = data.queryData.pages;
+			}
+
+			var pagelist = [{
+				class: (start_pagination == 1) ? "disabled" : "",
+				pagenum: start_pagination - 1,
+				text:"<<"
+			}];
+			
+			for(var i = start_pagination; i <= end_pagination; i++){
+				pagelist.push({
+					class: (data.page == i) ? "active" : "",
+					pagenum:i,
+					text:i
+				});
+			}
+
 			pagelist.push({
-				class: (data.page == i) ? "active" : "",
-				pagenum:i,
-				text:i
+				class: (end_pagination == data.queryData.pages) ? "disabled" : "",
+				pagenum:end_pagination + 1,
+				text:">>"
 			});
+
+			$scope.paginator = pagelist;
 		}
-
-		pagelist.push({
-			class: (end_pagination == data.queryData.pages) ? "disabled" : "",
-			pagenum:end_pagination + 1,
-			text:">>"
-		});
-
-		$scope.paginator = pagelist;
 
 
 		//ask the service to move to a new page.
 		$scope.moveToPage = function(){
-			QueryService.moveToPage(this.page.pagenum);
+			var pagenum = this.page.pagenum;
+			
+			//to make the interface responsive, update the paginator instantly
+			data.page = pagenum;
+			updatepaginator();
+
+			QueryService.moveToPage(pagenum);
 		};
 
 	}]);
 
 //this controller parses all the itemdetail data. 
-OCDAppCtrl.controller('ItemCtrl', ['$scope',
-	function ($scope) {
+OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
+	function ($scope, $http) {
 		//add the needed variables to the scope.
 		$scope.apiId = $scope.item._id || "";
 		var itemsource = $scope.item._source;
@@ -68,23 +78,45 @@ OCDAppCtrl.controller('ItemCtrl', ['$scope',
 			var d = new Date(itemsource.date);
 			$scope.date = d.getFullYear();
 		}
-		
+
+
+		var myMediaItem;
 		//resolve the image.
 		for (var i = 0; i < itemsource.media_urls.length; i++) {
-			var media_item = itemsource.media_urls[i];
+			mediaItem = itemsource.media_urls[i];
 			
 			// Skip the non-image media urls (for example Openbeelden videos)
-			if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(media_item.content_type) == -1)
+			if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1)
 				continue;
 
 			// Pick the 500px image (Beeldbank Nationaal Archief)
-			if(media_item && media_item.width == 500){
-				$scope.imgurl = media_item.url;
+			if(mediaItem && mediaItem.width == 500){
+				myMediaItem = mediaItem.url;
 				break;
 			}
 
 			// or pick the last image left (for example Rijksmuseum, Openbeelden)
-			$scope.imgurl = media_item.url;
+			myMediaItem = mediaItem.url;
+
+		}
+		
+		//get redirect location of the OpenCultuurData Resolver URLs
+		// We use this as a temporary solution to get smaller sized images from Rijksmuseum
+		if(itemsource.meta.collection == "Rijksmuseum"){
+			$http.get('php/resolve_rijks_url.php', {params:{url:mediaItem.url}}).success(function(data) {
+
+				if(data.error){
+					console.log("phperror");
+					console.log(data.error);
+					alert("Error: php-failed");
+					queryData = false;
+					return;
+				}
+
+				$scope.imgurl = data.url.replace('%3Ds0', '=s450');
+			});
+		}else{
+			$scope.imgurl = myMediaItem;
 		}
 	}]);
 
