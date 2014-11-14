@@ -2,7 +2,7 @@
   "name": "ocd-search",
   "version": "0.0.1",
   "homepage": "https://github.com/TMeerhof/ocd-search",
-  "directory": "app/bower_components/",
+  "directory": "app/bower_components",
   "authors": [
     "TMeerhof <tim@meerhof.nl>"
   ],

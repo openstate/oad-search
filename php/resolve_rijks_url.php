@@ -8,7 +8,7 @@ $url = filter_input(INPUT_GET, 'url') ? filter_input(INPUT_GET, 'url') : null;
 
 
 
-// Function to get redirect location of the OpenCultuurData Resolver URLs
+//get redirect location of the OpenCultuurData Resolver URLs
 // We use this as a temporary solution to get smaller sized images from Rijksmuseum
 if(isset($url)) {
     $ch = curl_init();

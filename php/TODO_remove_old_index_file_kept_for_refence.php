@@ -75,7 +75,7 @@ if ($q) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- We need to include the CSS instead of using CSS through CDN for IE8 support -->
-        <link href="bootswatch.css" rel="stylesheet">
+        <link href="../app/css/bootswatch.css" rel="stylesheet">
         <style type="text/css">
             body {
                 padding-top: 70px;

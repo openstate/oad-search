@@ -1,0 +1,9 @@
+  <div class="col-xs-2" style="background-color:#eee;" ng-controller="leftbarCtrl">
+    <h3 class="demo-panel-title">Sources</h3>
+    <div ng-repeat="facet in facets">
+      <label class="checkbox" for="checkbox1">
+        <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" ng-model="collections[facet.term]" ng-change="changeList()">
+        {{facet.term}} <small>({{facet.count}})</small>
+      </label>
+    </div>
+  </div>

@@ -8,7 +8,6 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 		data = QueryService.getData();
 		console.log(data);
 		if(data){
-			$scope.facets = data.queryData.facets.collection.terms;
 			$scope.results =  data.queryData.results;
 			updatepaginator();
 		}
@@ -103,7 +102,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 		//get redirect location of the OpenCultuurData Resolver URLs
 		// We use this as a temporary solution to get smaller sized images from Rijksmuseum
 		if(itemsource.meta.collection == "Rijksmuseum"){
-			$http.get('php/resolve_rijks_url.php', {params:{url:mediaItem.url}}).success(function(data) {
+			$http.get('php/resolve_rijks_url.php', {params:{url:myMediaItem}}).success(function(data) {
 
 				if(data.error){
 					console.log("phperror");
@@ -113,12 +112,47 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 					return;
 				}
 
+				$scope.imgurlref = myMediaItem;
 				$scope.imgurl = data.url.replace('%3Ds0', '=s450');
 			});
 		}else{
+			$scope.imgurlref = myMediaItem;
 			$scope.imgurl = myMediaItem;
 		}
 	}]);
+
+//this controller controlls the leftbar .
+OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
+	function ($scope, QueryService) {
+		//get the data from the Queryservice
+		data = QueryService.getData();
+		
+		$scope.collections = {};
+
+		if(data){
+			$scope.collections = data.queryData.collections;
+			$scope.facets = data.queryData.facets.collection.terms;
+			var daterange = data.queryData.facets.date.entries;
+			var firstdate = new Date(daterange[0].time);
+			var lastdate = new Date(daterange[daterange.length - 1].time);
+			console.log(firstdate);
+			console.log(lastdate);
+		}
+
+		$scope.changeList =  function(){
+			var exclude = [];
+			for(var collectionkey in $scope.collections){
+				if(!$scope.collections[collectionkey])
+					exclude.push(collectionkey);
+			}
+			console.log(exclude);
+
+			QueryService.updateCollections(exclude);
+
+			
+		};
+	}
+	]);
 
 //this controller controlls the navbar.
 OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService',

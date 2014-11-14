@@ -1,15 +1,7 @@
 <div class="container-fluid">
-  <div class="col-xs-2" style="background-color:#eee;">
-    <form class="form" role="form" ng-submit="onFormSubmit()">
-      <h3 class="demo-panel-title">Indexes</h3>
-      <div ng-repeat="facet in facets">
-        <label class="checkbox" for="checkbox1">
-          <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" checked="checked">
-          {{facet.term}} <small>({{facet.count}})</small>
-        </label>
-      </div>
-    </form>
-  </div>
+  
+  <!--the left bar is included -->
+  <div ng-include="'app/partials/leftbar.html'"></div>
   
   <!--the actual body of the page -->
   <div class="col-xs-10">
@@ -33,7 +25,7 @@
     <!--display the results -->
     <div ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4">
       <div class="thumbnail" >
-        <a href="{{imgurl}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
+        <a href="{{imgurlref}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
         <div class="caption">
           <div class="thumb-body"> 
             <h4>{{title}}</h4>

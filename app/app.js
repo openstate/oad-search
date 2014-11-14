@@ -25,6 +25,19 @@ OCDApp.config(['$routeProvider',
           }]
         }
       }).
+    when('/query/:q/page/:page/options/:options',  {
+      templateUrl: 'app/partials/query.html',
+      controller: 'queryCtrl',
+        //if you define a resolve, the routeProvider will wait till till all promises defined here
+        //are resolved before updating the route and the data. This makes the transions smoother.
+        resolve:{
+          getData:['$route' , 'QueryService', function($route, QueryService) {
+            //the Queryservice is our own service, responcible for communicating with the OCD API. 
+            var queryPromise = QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options);
+            return queryPromise;
+          }]
+        }
+      }).
     otherwise({
       redirectTo: '/query/rembrandt/page/1'
     });
