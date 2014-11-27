@@ -105,6 +105,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 				queryData = data;
 				query = newQuery;
 				page = newPage;
+
 				if(!!newOptions){
 					optionsString = newOptions;
 					options = base64url_decode(optionsString);
@@ -149,8 +150,11 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 		//the Date range slider needs to know min max and user settings
 		queryService.getDateObject = function(){
+			//if the datefilter is not in use, update the bacefacets.
+			if(options && !options.date && queryData.facets && queryData.facets.date)
+				basefacets.date = queryData.facets.date;
+						
 			var daterange = basefacets.date.entries;
-
 			if(daterange.length > 0){
 				var firstdate = new Date(daterange[0].time);
 				var lastdate = new Date(daterange[daterange.length - 1].time);
@@ -217,6 +221,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			var basefacet = basefacets[facetname];
 			var queryfacet = queryData.facets[facetname];
 
+			//if the filter is not in use or fixed, return the terms or the last query.
 			if(!fixedfacet && options && !options[facetname]){
 				basefacets[facetname] = queryData.facets[facetname];
 				for(var i =0; i < queryfacet.terms.length; i++ ){
@@ -230,10 +235,11 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					
 				}
 			} else {
+				//if the facet/filter is in use or fixed, base the list on the basefacets.
 				for(var i =0; i < basefacet.terms.length; i++ ){
 					var term = basefacet.terms[i];
 					
-					//if no options are defined, just push the basefacets.
+					//if no options are defined, just push the basefacets. (for fixed filters)
 					if(!options){
 						results.push({
 							name: term.term,
@@ -243,14 +249,16 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 						continue;
 					}
 
+					//if in filterlist, return empty term.
 					if(options[facetname] && options[facetname].indexOf(term.term) > -1){
 						results.push({
 							name: term.term,
 							count: 0,
-							active:false
+							active:false //turn off the checkbox
 						});
 						continue;
 					}
+
 					//determine if the term is in the returned query.
 					var inQuery = false;
 					for(var j =0; j < queryfacet.terms.length; j++ ){
@@ -268,6 +276,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					if(inQuery)
 						continue;
 
+					//if non off the above, return empty term with active checkbox.
 					results.push({
 						name: term.term,
 						count: 0,
@@ -296,7 +305,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			} else
 				options[facetname] = optiondata;
 
-
+			debugger;
 			var urlstring;
 			//if options is empty, remove options from url
 			if(!jQuery.isEmptyObject(options)){

@@ -7,7 +7,9 @@
     </label>
   </div>
   <h3 class="demo-panel-title">Filters</h3>
-  <h4 class="demo-panel-title">Year</h4>
+  <h4 class="demo-panel-title">Year 
+    <button ng-disabled="buttonstate['date']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('date')">reset</button>
+  </h4>
   <div range-slider min="date.min" max="date.max" model-min="date.usermin" model-max="date.usermax" on-handle-up="onHandleUp()" show-values="true"></div>
   <br>
   <h4 class="demo-panel-title">Author

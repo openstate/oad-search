@@ -160,16 +160,28 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 			setButtonState('rights');
 			
 			$scope.showValues = true;
-			$scope.date = QueryService.getDateObject();
 			
+			$scope.date = QueryService.getDateObject();
+			if($scope.date && $scope.date.usermin == $scope.date.min && $scope.date.usermax == $scope.date.max)
+				$scope.buttonstate.date = true;
+			else
+				$scope.buttonstate.date = false;
 		}
 
 		$scope.onHandleUp = function(){
-			var usersettings = {
-				usermin:$scope.date.usermin,
-				usermax:$scope.date.usermax
-			};
-			QueryService.setFilterOption('date' , usersettings);
+			console.log('fireonhandle');
+			
+			if($scope.date.usermin == $scope.date.min && $scope.date.usermax == $scope.date.max){
+				QueryService.setFilterOption('date' , []);
+				$scope.buttonstate.date = true;
+			}
+			else{
+				$scope.buttonstate.date = false;
+				QueryService.setFilterOption('date' , {
+					usermin:$scope.date.usermin,
+					usermax:$scope.date.usermax
+				});
+			}
 		};
 
 		function setButtonText(facetname){
@@ -205,6 +217,7 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 					if (facet[i].active)
 						activecount++;
 				}
+				
 				if(activecount <= facet.length/2){
 					QueryService.setFilterOption(facetname, []);
 					return;
@@ -220,7 +233,7 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 
 		$scope.resetFilter = function(facetname){
 			QueryService.setFilterOption(facetname, []);
-		}
+		};
 
 		$scope.updateExcludeList =  function(facetname){
 			//var selected = this.facet;
@@ -274,7 +287,6 @@ OCDAppCtrl.controller('ErrorCtrl', ['$scope', function($scope) {
 	};
 
 	$scope.$on('error', function(e, errorMessage) {
-
 		$scope.currentError = errorMessage;
 	});
 
