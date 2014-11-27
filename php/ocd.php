@@ -235,7 +235,7 @@ class Ocd implements Iterator {
         if (!isset($this->page['hits']['total'])) {
             return FALSE;
         }
-        if ($pos > ($this->page['hits']['total'] - 1)) {
+        if ($this->offset + $pos > ($this->page['hits']['total'] - 1)) {
             return FALSE;
         }
         if (isset($this->limit) &&
@@ -288,7 +288,7 @@ class Ocd implements Iterator {
 
 // performs the actual curl request    
     private function rest($op, $request, $post_fields = null) {
-     //    print("rest() $request op " . $this->api_uri() . $op . " fields $post_fields\n");
+        //print("rest() $request op " . $this->api_uri() . $op . " fields $post_fields\n");
         $ch = curl_init($this->api_uri() . $op);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request);
         if ($post_fields != null) {

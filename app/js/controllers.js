@@ -10,9 +10,16 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 		if(data){
 			$scope.results =  data.queryData.results;
 			updatepaginator();
+			
+
 		}
 
 		function updatepaginator(){
+
+			if(data.queryData.pages < 2){
+				$scope.paginator = false;
+				return;
+			}
 			//build a array of options for the paginator.
 			var start_pagination = ((Math.ceil(data.page / 6) - 1) * 6) + 1;
 			var end_pagination = start_pagination + 5;
@@ -66,7 +73,20 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 		var itemsource = $scope.item._source;
 
 		$scope.title = itemsource.title || "Title unknown";
+
 		$scope.author = itemsource.authors && itemsource.authors[0] || "Author unknown";
+		if(itemsource.authors && itemsource.authors.length > 1) {
+			$scope.authorhooverindicate = "...";
+			
+			var hoovertext = "";
+			for(var i = 0; i < itemsource.authors.length; i++) {
+				hoovertext += itemsource.authors[i] + ' / ';
+			}
+			
+			$scope.authorhoover = hoovertext.slice(0,-3);
+
+		}
+
 		$scope.collection = itemsource.meta.collection || "Collection unknown";
 		$scope.originalCollectionUrl = itemsource.meta.original_object_urls.html || "";
 		$scope.apiUrl = itemsource.meta.ocd_url || "";
@@ -125,38 +145,102 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 	function ($scope, QueryService) {
 		//get the data from the Queryservice
-		data = QueryService.getData();
-		
-		$scope.collections = {};
-
+		var data = QueryService.getData();
 		if(data){
-			$scope.collections = data.queryData.collections;
-			$scope.facets = data.queryData.facets.collection.terms;
-			var daterange = data.queryData.facets.date.entries;
-			var firstdate = new Date(daterange[0].time);
-			var lastdate = new Date(daterange[daterange.length - 1].time);
-			console.log(firstdate);
-			console.log(lastdate);
+			$scope.buttonstate = [];
+			$scope.buttontext = [];
+
+			$scope.collection = QueryService.getFacet('collection', true);
+			setButtonText('collection');
+
+			$scope.author = QueryService.getFacet('author', false);
+			setButtonState('author');
+
+			$scope.rights = QueryService.getFacet('rights', false);
+			setButtonState('rights');
+			
+			$scope.showValues = true;
+			$scope.date = QueryService.getDateObject();
+			
 		}
 
-		$scope.changeList =  function(){
+		$scope.onHandleUp = function(){
+			var usersettings = {
+				usermin:$scope.date.usermin,
+				usermax:$scope.date.usermax
+			};
+			QueryService.setFilterOption('date' , usersettings);
+		};
+
+		function setButtonText(facetname){
+			var facet = $scope[facetname];
+			if(!!facet){
+				var setState = 'deselect all';
+				var activecount = 0;
+				for(var i = 0; i < facet.length; i++){
+					if (facet[i].active)
+						activecount++;
+				}
+				if(activecount <= facet.length/2)
+					setState = 'reset';
+				
+				$scope.buttontext[facetname] = setState;
+			}
+		}
+
+		function setButtonState(facetname){
+			if(QueryService.getFilterOption(facetname).length > 0)
+				$scope.buttonstate[facetname] = false;
+			else
+				$scope.buttonstate[facetname] = true;
+		}
+
+
+		$scope.toggle = function(facetname){
+			var facet = $scope[facetname];
+			
+			if(!!facet){
+				var activecount = 0;
+				for(var i = 0; i < facet.length; i++){
+					if (facet[i].active)
+						activecount++;
+				}
+				if(activecount <= facet.length/2){
+					QueryService.setFilterOption(facetname, []);
+					return;
+				}
+
+				var exclude = [];
+				for(var i = 0; i < facet.length; i++){
+					exclude.push(facet[i].name);
+				}
+				QueryService.setFilterOption(facetname, exclude);
+			}
+		};
+
+		$scope.resetFilter = function(facetname){
+			QueryService.setFilterOption(facetname, []);
+		}
+
+		$scope.updateExcludeList =  function(facetname){
+			//var selected = this.facet;
+			var facet = $scope[facetname];
 			var exclude = [];
-			for(var collectionkey in $scope.collections){
-				if(!$scope.collections[collectionkey])
-					exclude.push(collectionkey);
+			
+			for(var i = 0; i < facet.length; i++){
+				if (!facet[i].active)
+					exclude.push(facet[i].name);
 			}
 			console.log(exclude);
+			QueryService.setFilterOption(facetname, exclude);
 
-			QueryService.updateCollections(exclude);
-
-			
 		};
 	}
 	]);
 
 //this controller controlls the navbar.
-OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService',
-	function ($scope, $location, QueryService) {
+OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService',
+	function ($scope, QueryService) {
 
 		$scope.query = "";
 
@@ -166,9 +250,9 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService',
 			$scope.query = data.query;
 		});
 
-		//change the url to represent new seach. Remove options and set page back to one.
+		//call the service and notify them of a new search query
 		$scope.search = function(){
-			$location.path( 'query/'+$scope.query+'/page/1' );
+			QueryService.newSearchString($scope.query);
 		};
 
 
@@ -181,3 +265,17 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', '$location', 'QueryService',
 	]);
 
 
+OCDAppCtrl.controller('ErrorCtrl', ['$scope', function($scope) {
+
+	$scope.currentError = null;
+
+	$scope.clearError = function () {
+		$scope.currentError = null;
+	};
+
+	$scope.$on('error', function(e, errorMessage) {
+
+		$scope.currentError = errorMessage;
+	});
+
+}]);

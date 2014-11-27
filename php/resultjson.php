@@ -3,15 +3,8 @@ header('Content-type: application/json');
 
 //report error and notices in JSON so its available in the angular app.
 include_once 'errortoJSON.php';
-
-
 include_once 'ocd.php';
 include_once 'LZString.php';
-
-
-
-
-
 
 //this class returns a object with the relevant data in JSONformat;
 class JsonReturn implements JsonSerializable {
@@ -60,49 +53,42 @@ $collection = filter_input(INPUT_GET, 'collection') ? filter_input(INPUT_GET, 'c
 $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : $page ;
 $options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : null;
 
-$collectionshardcoded = [
-"Rijksmuseum",
-"Beeldbank Nationaal Archief",
-"Tropenmuseum", 
-"Amsterdam Museum", 
-"Open Beelden", 
-"Fries Museum", 
-"TextielMuseum" ,
-"Centraal Museum Utrecht" ,
-"Koninklijke Bibliotheek - ByvanckB",
-"Visserijmuseum Zoutkamp",
-];
-
-if(isset($options)){
-    $LZString = new LZString();
-    $options = json_decode ($LZString->decompressFromBase64($options), true);
-    for($i = 0; $i < count($options['exclude']); ++$i) {
-        $option = $options['exclude'][$i];
-        for($j = 0; $j < count($collectionshardcoded); ++$j) {
-            if($collectionshardcoded[$j] == $option){
-              array_splice($collectionshardcoded, $j, 1);
-                
-            }
-        }
-    }
-}
-
-
 $facets = array(
     'collection' => array($collection),
     'date'  =>  array(
         'interval' => 'year'
-        )
+        ),
+    'author' => array(),
+    'rights' => array()
+
     );
 
 $filters = array(
     'media_content_type' => array(
         'terms' => $media_content_type_terms
-        ), 
-    'collection' => array(
-        'terms' => $collectionshardcoded
         )
     );
+
+
+if(isset($options) ){
+    $LZString = new LZString();
+    $options = json_decode ($LZString->decompressFromBase64($options), true);
+    
+    foreach ($options as $key => $termlist){
+       if($key == 'date'){
+            $filters['date'] = array(
+                'from' => $termlist['usermin'].'-01-01',
+                'to' => $termlist['usermax'].'-12-31'
+            );
+       } else {
+            $filters[$key] = array(
+                'terms' => $termlist
+            );
+       }
+    }
+}
+
+//print_r($filters);
 
 if ($q) {
     $ocd = new Ocd();

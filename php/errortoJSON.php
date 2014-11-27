@@ -7,12 +7,16 @@ function log_error( $num, $str, $file, $line, $context = null )
 
 function log_exception( Exception $e )
 {
+
+
     echo '{"error":{';
     echo '"class":"' . get_class( $e ) . '",';
     echo '"file":"'  . addslashes ($e->getFile()) . '",';
     echo '"message":"' . $e->getMessage() . '",';
     echo '"line":"' . $e->getLine() . '"';
+
     echo "}}";
+
     exit();
 }
 

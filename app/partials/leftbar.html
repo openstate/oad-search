@@ -1,9 +1,35 @@
-  <div class="col-xs-2" style="background-color:#eee;" ng-controller="leftbarCtrl">
-    <h3 class="demo-panel-title">Sources</h3>
-    <div ng-repeat="facet in facets">
-      <label class="checkbox" for="checkbox1">
-        <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox" ng-model="collections[facet.term]" ng-change="changeList()">
-        {{facet.term}} <small>({{facet.count}})</small>
-      </label>
-    </div>
+<div class="col-xs-2" style="background-color:#eee;" ng-controller="leftbarCtrl">
+  <h3 class="demo-panel-title">Sources<button  class="btn btn-primary btn-sm pull-right" ng-click="toggle('collection')">{{buttontext['collection']}}</button></h3>
+  <div ng-repeat="facet in collection">
+    <label class="checkbox" for="{{facet.name}}">
+      <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('collection')">
+      {{facet.name}} <small>({{facet.count}})</small>
+    </label>
   </div>
+  <h3 class="demo-panel-title">Filters</h3>
+  <h4 class="demo-panel-title">Year</h4>
+  <div range-slider min="date.min" max="date.max" model-min="date.usermin" model-max="date.usermax" on-handle-up="onHandleUp()" show-values="true"></div>
+  <br>
+  <h4 class="demo-panel-title">Author
+    <button ng-disabled="buttonstate['author']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('author')">reset</button>
+  </h4>
+  <div ng-repeat="facet in author">
+    <label class="checkbox" for="{{facet.name}}">
+      <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('author')">
+      {{facet.name}} <small>({{facet.count}})</small>
+    </label>
+  </div>
+  <br>
+  <h4 class="demo-panel-title">Rights
+    <button ng-disabled="buttonstate['rights']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('rights')">reset</button>
+  </h4>
+  <div ng-repeat="facet in rights">
+    <label class="checkbox" for="{{facet.name}}">
+      <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('rights')">
+      {{facet.name}} <small>({{facet.count}})</small>
+    </label>
+  </div>
+  <br>
+
+</div>
+</div>

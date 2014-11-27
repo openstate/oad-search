@@ -5,11 +5,15 @@
   <title>OCD search</title>
 
   <!--Include all the bower dependencies from the bower folder-->
+  <script src="app/bower_components/jquery/dist/jquery.min.js"></script>
   <script src="app/bower_components/angular/angular.js"></script>
   <script src="app/bower_components/angular-route/angular-route.js"></script>
+  <script src="app/bower_components/angular-rangeslider/angular.rangeSlider.js"></script>
+
   <script src="app/extras/lz-string-1.3.3-min.js"></script>
 
   <link rel="stylesheet" type="text/css" href="app/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="app/bower_components/angular-rangeslider/angular.rangeSlider.css">
 
   <!--Include youre own files-->
   <link rel="stylesheet" type="text/css" href="app/css/bootswatch.css">
@@ -25,8 +29,11 @@
 
   <!--include the navbar-->
   <div ng-include="'app/partials/nav.html'"></div>
+  
+  <!--include the alert-->
+  <div ng-include="'app/partials/error.html'"></div>
 
-    <!--ng-view is the place angular renders the router template-->
+  <!--ng-view is the place angular renders the router template-->
   <div ng-view></div>
 
 </body>

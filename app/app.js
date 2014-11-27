@@ -1,6 +1,7 @@
 //define youre app and declare dependencies
 var OCDApp = angular.module('OCDApp', [
 	'ngRoute',           //routes used below
+  'ui-rangeSlider',    //range-slider used in left bar       
   'OCDAppServices',    //our services
   'OCDAppControllers'  //our controlers
   ]);
@@ -32,6 +33,7 @@ OCDApp.config(['$routeProvider',
         //are resolved before updating the route and the data. This makes the transions smoother.
         resolve:{
           getData:['$route' , 'QueryService', function($route, QueryService) {
+            
             //the Queryservice is our own service, responcible for communicating with the OCD API. 
             var queryPromise = QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options);
             return queryPromise;
@@ -39,11 +41,31 @@ OCDApp.config(['$routeProvider',
         }
       }).
     otherwise({
+      
+      
+
       redirectTo: '/query/rembrandt/page/1'
     });
 
 
   }]);
+
+OCDApp.config(['$provide', function($provide) {
+            $provide.decorator('$exceptionHandler', ['$delegate', '$injector', function($delegate, $injector) {
+                return function(exception) {
+
+
+                    $injector.invoke(['$rootScope', function($rootScope) {
+
+                        $rootScope.$broadcast('error', exception.message);
+                    }]);
+
+
+                    return $delegate(exception);
+
+                };
+            }]);
+        }]);
 
 //here the rootscope object loadingview is set, the loading view is based on this variable.
 OCDApp.run(['$rootScope', function($root) {
