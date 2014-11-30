@@ -10,8 +10,6 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 		if(data){
 			$scope.results =  data.queryData.results;
 			updatepaginator();
-			
-
 		}
 
 		function updatepaginator(){
@@ -20,7 +18,7 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 				$scope.paginator = false;
 				return;
 			}
-			//build a array of options for the paginator.
+			
 			var start_pagination = ((Math.ceil(data.page / 6) - 1) * 6) + 1;
 			var end_pagination = start_pagination + 5;
 
@@ -28,6 +26,7 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 				end_pagination = data.queryData.pages;
 			}
 
+			//build a array for the paginator.
 			var pagelist = [{
 				class: (start_pagination == 1) ? "disabled" : "",
 				pagenum: start_pagination - 1,
@@ -74,7 +73,10 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 
 		$scope.title = itemsource.title || "Title unknown";
 
+		//show the first author
 		$scope.author = itemsource.authors && itemsource.authors[0] || "Author unknown";
+		
+		//if more authors, show the three dots and add title text.
 		if(itemsource.authors && itemsource.authors.length > 1) {
 			$scope.authorhooverindicate = "...";
 			
@@ -104,7 +106,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 		for (var i = 0; i < itemsource.media_urls.length; i++) {
 			mediaItem = itemsource.media_urls[i];
 			
-			// Skip the non-image media urls (for example Openbeelden videos)
+			// Skip the non-image media content type (for example Openbeelden videos)
 			if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1)
 				continue;
 
@@ -120,7 +122,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 		}
 		
 		//get redirect location of the OpenCultuurData Resolver URLs
-		// We use this as a temporary solution to get smaller sized images from Rijksmuseum
+		//We use this as a temporary solution to get smaller sized images from Rijksmuseum
 		if(itemsource.meta.collection == "Rijksmuseum"){
 			$http.get('php/resolve_rijks_url.php', {params:{url:myMediaItem}}).success(function(data) {
 
@@ -132,6 +134,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 					return;
 				}
 
+				//the link should go to the full size image, the thumbnail should have the smaller img.
 				$scope.imgurlref = myMediaItem;
 				$scope.imgurl = data.url.replace('%3Ds0', '=s450');
 			});
@@ -147,43 +150,42 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 		//get the data from the Queryservice
 		var data = QueryService.getData();
 		if(data){
-			$scope.buttonstate = [];
+			//array to hold all the filter button states. 
+			$scope.filterResetButtonState = [];
 			$scope.buttontext = [];
 
 			$scope.collection = QueryService.getFacet('collection', true);
 			setButtonText('collection');
 
 			$scope.author = QueryService.getFacet('author', false);
-			setButtonState('author');
+			setResetButtonState('author');
 
 			$scope.rights = QueryService.getFacet('rights', false);
-			setButtonState('rights');
+			setResetButtonState('rights');
 			
 			$scope.showValues = true;
 			
 			$scope.date = QueryService.getDateObject();
+			//set the reset button state.
 			if($scope.date && $scope.date.usermin == $scope.date.min && $scope.date.usermax == $scope.date.max)
-				$scope.buttonstate.date = true;
+				$scope.filterResetButtonState.date = true;
 			else
-				$scope.buttonstate.date = false;
+				$scope.filterResetButtonState.date = false;
 		}
 
 		$scope.onHandleUp = function(){
-			console.log('fireonhandle');
-			
+			// if the user returns the handles to the max and min, reset filter.
 			if($scope.date.usermin == $scope.date.min && $scope.date.usermax == $scope.date.max){
 				QueryService.setFilterOption('date' , []);
-				$scope.buttonstate.date = true;
+				$scope.filterResetButtonState.date = true;
 			}
 			else{
-				$scope.buttonstate.date = false;
-				QueryService.setFilterOption('date' , {
-					usermin:$scope.date.usermin,
-					usermax:$scope.date.usermax
-				});
+				$scope.filterResetButtonState.date = false;
+				QueryService.setFilterOption('date' , $scope.date );
 			}
 		};
 
+		//switch between Rest and deselect all
 		function setButtonText(facetname){
 			var facet = $scope[facetname];
 			if(!!facet){
@@ -200,24 +202,23 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 			}
 		}
 
-		function setButtonState(facetname){
+		//activate the reset button, if this filter is in the options.
+		function setResetButtonState(facetname){
 			if(QueryService.getFilterOption(facetname).length > 0)
-				$scope.buttonstate[facetname] = false;
+				$scope.filterResetButtonState[facetname] = false;
 			else
-				$scope.buttonstate[facetname] = true;
+				$scope.filterResetButtonState[facetname] = true;
 		}
-
 
 		$scope.toggle = function(facetname){
 			var facet = $scope[facetname];
-			
 			if(!!facet){
 				var activecount = 0;
 				for(var i = 0; i < facet.length; i++){
 					if (facet[i].active)
 						activecount++;
 				}
-				
+
 				if(activecount <= facet.length/2){
 					QueryService.setFilterOption(facetname, []);
 					return;
@@ -238,15 +239,13 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 		$scope.updateExcludeList =  function(facetname){
 			//var selected = this.facet;
 			var facet = $scope[facetname];
+
 			var exclude = [];
-			
 			for(var i = 0; i < facet.length; i++){
 				if (!facet[i].active)
 					exclude.push(facet[i].name);
 			}
-			console.log(exclude);
 			QueryService.setFilterOption(facetname, exclude);
-
 		};
 	}
 	]);

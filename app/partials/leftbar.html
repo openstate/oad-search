@@ -8,12 +8,12 @@
   </div>
   <h3 class="demo-panel-title">Filters</h3>
   <h4 class="demo-panel-title">Year 
-    <button ng-disabled="buttonstate['date']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('date')">reset</button>
+    <button ng-disabled="filterResetButtonState['date']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('date')">reset</button>
   </h4>
   <div range-slider min="date.min" max="date.max" model-min="date.usermin" model-max="date.usermax" on-handle-up="onHandleUp()" show-values="true"></div>
   <br>
   <h4 class="demo-panel-title">Author
-    <button ng-disabled="buttonstate['author']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('author')">reset</button>
+    <button ng-disabled="filterResetButtonState['author']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('author')">reset</button>
   </h4>
   <div ng-repeat="facet in author">
     <label class="checkbox" for="{{facet.name}}">
@@ -23,7 +23,7 @@
   </div>
   <br>
   <h4 class="demo-panel-title">Rights
-    <button ng-disabled="buttonstate['rights']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('rights')">reset</button>
+    <button ng-disabled="filterResetButtonState['rights']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('rights')">reset</button>
   </h4>
   <div ng-repeat="facet in rights">
     <label class="checkbox" for="{{facet.name}}">

@@ -17,9 +17,10 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		var basefacets = false;
 		
 		//check if basefacets are available, otherwise get some.
+		//return a promise
 		function checkbasefacets (newQuery, newPage, newOptions){
 			var deferred = $q.defer();
-		
+
 			if(basefacets || !newOptions){
 				//if basefacets are set or there are no options no need
 				//for extra ajax call 
@@ -64,8 +65,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 				completepromise  will be returned to the router, 
 				the router will wait until the completepromise is resolved.
-			****************************/
-			var completepromise = checkbasefacets(newQuery, newPage, newOptions)
+				****************************/
+				var completepromise = checkbasefacets(newQuery, newPage, newOptions)
 			//then get the actual query.
 			.then( function() {
 				if(!!newOptions) {
@@ -115,7 +116,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 				else if(!basefacets){
 					basefacets = queryData.facets;
 				}
-					
+
 				//becouse the nav controllers depend on this data, broadcast it.
 				$rootScope.$broadcast('New Query', {
 					query: query,
@@ -150,45 +151,31 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 		//the Date range slider needs to know min max and user settings
 		queryService.getDateObject = function(){
-			//if the datefilter is not in use, update the bacefacets.
-			if(options && !options.date && queryData.facets && queryData.facets.date)
-				basefacets.date = queryData.facets.date;
-						
-			var daterange = basefacets.date.entries;
-			if(daterange.length > 0){
-				var firstdate = new Date(daterange[0].time);
-				var lastdate = new Date(daterange[daterange.length - 1].time);
-				var min = firstdate.getFullYear();
-				var max = lastdate.getFullYear();
+			//if there are filter options, return the filter options.
+			if(!!options && options.date){
+				//TODO: check if options are correct.
+				return options.date;
+			}
+			else {
+				//if the query had new data, update basefacets.
+				if(queryData.facets && queryData.facets.date)
+					basefacets.date = queryData.facets.date;
 
-				var usermin;
-				var usermax;
-
-				//if options are defined, use options
-				if(!!options && options.date){
-					usermin = options.date.usermin;
-					usermax = options.date.usermax;
-
-					//check if useroptions are within bounds. 
-					if(usermax < min)
-						usermax = min;
-
-					if(usermin > max)
-						usermin = max;
-
-				} else {
-					usermin = firstdate.getFullYear();
-					usermax = lastdate.getFullYear();
+				var daterange = basefacets.date.entries;
+				if(daterange.length > 0) {
+					var firstdate = new Date(daterange[0].time);
+					var lastdate = new Date(daterange[daterange.length - 1].time);
+					var min = firstdate.getFullYear();
+					var max = lastdate.getFullYear();
+					
+					//because there are no options, set usersettings to min and max.
+					return {
+						min:min,
+						max:max,
+						usermin:min,
+						usermax:max
+					};
 				}
-
-				var dateObject = {
-					min:min,
-					max:max,
-					usermin:usermin,
-					usermax:usermax
-				};
-			//	console.log(dateObject);
-				return dateObject;
 			}
 		};
 
@@ -221,13 +208,13 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			var basefacet = basefacets[facetname];
 			var queryfacet = queryData.facets[facetname];
 
-			//if the filter is not in use or fixed, return the terms or the last query.
+			//if the filter is not in use or fixed, return the terms of the last query.
 			if(!fixedfacet && options && !options[facetname]){
 				basefacets[facetname] = queryData.facets[facetname];
 				for(var i =0; i < queryfacet.terms.length; i++ ){
 					
 					var term = queryfacet.terms[i];
-						results.push({
+					results.push({
 						name: term.term,
 						count: term.count,
 						active:true
@@ -235,7 +222,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					
 				}
 			} else {
-				//if the facet/filter is in use or fixed, base the list on the basefacets.
+				//if the facet/filter is in use or fixed, build a list based on the basefacets.
 				for(var i =0; i < basefacet.terms.length; i++ ){
 					var term = basefacet.terms[i];
 					
@@ -250,6 +237,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					}
 
 					//if in filterlist, return empty term.
+					//this is done before the query check, becouse otherwise multiauthor
+					//items, make filtered authors show up in the list. 
 					if(options[facetname] && options[facetname].indexOf(term.term) > -1){
 						results.push({
 							name: term.term,
@@ -276,7 +265,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					if(inQuery)
 						continue;
 
-					//if non off the above, return empty term with active checkbox.
+					//if none off the above, return empty term with active checkbox.
+					//one off the other filters pushed results out of the list.
 					results.push({
 						name: term.term,
 						count: 0,
@@ -299,20 +289,22 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			if(!options)
 				options = {};
 			
+			//if it tries to set a empty optionlist, delete the option instead.
 			if(optiondata.length === 0){
 				if(!!options[facetname])
 					delete options[facetname];
-			} else
+			}
+			else
 				options[facetname] = optiondata;
 
-			debugger;
 			var urlstring;
-			//if options is empty, remove options from url
+			//if options is not empty encode option.
 			if(!jQuery.isEmptyObject(options)){
 				var encodeOptions = base64url_encode(options);
 				
 				urlstring = 'query/'+query+"/page/1/options/"+encodeOptions;
-			} else
+			}
+			else
 				urlstring = 'query/'+query+"/page/1";
 			
 			//console.log(options);
@@ -320,6 +312,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 			$location.path(urlstring);
 			
+			//the daterange slider, does not start a digest, so start manualy.
 			if(facetname == 'date' && $rootScope.$$phase != '$apply' && $rootScope.$$phase != '$digest'){
 				$rootScope.$apply();
 			}
@@ -328,6 +321,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		return queryService;
 	}]);
 
+//
 function toJSONandCompres(obj){
 	return window.LZString.compressToBase64(JSON.stringify(obj));
 }
@@ -342,6 +336,6 @@ function base64url_encode(obj) {
 }
 
 function base64url_decode(string) {
-    return decompresToObject(string.split('-').join('/'));
+	return decompresToObject(string.split('-').join('/'));
 }
 
