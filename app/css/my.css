@@ -12,6 +12,11 @@
  	min-width: 273px;
  }
 
+ .thumbnail-frontpage{
+ 	height: 400px;
+ 	cursor:pointer;
+ }
+
  .thumbnail .caption {
  	padding: 0px 0px;
  }
@@ -67,3 +72,4 @@
  .alert-dismissible {
  	padding-right: 35px;
  }
+

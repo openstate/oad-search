@@ -52,21 +52,27 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 						message: 'php get failed, check console for details.'
 					};
 				}
+				data.data.query = newQuery;
 				return data.data;
 			});
 		}
 
+		queryService.simplehttpGet = function(newQuery){
+			return getHttp(newQuery, 1);
+		};
+
+
 		queryService.httpGetNewOCDData = function(newQuery, newPage, newOptions){
 			
 			/**************************
-				first detenmine if basefacets need to be get.
-				then make a http get with the query, wich relays on the basefacets
-				then do something with the returned data.
+			first detenmine if basefacets need to be get.
+			then make a http get with the query, wich relays on the basefacets
+			then do something with the returned data.
 
-				completepromise  will be returned to the router, 
-				the router will wait until the completepromise is resolved.
-				****************************/
-				var completepromise = checkbasefacets(newQuery, newPage, newOptions)
+			completepromise  will be returned to the router, 
+			the router will wait until the completepromise is resolved.
+			****************************/
+			var completepromise = checkbasefacets(newQuery, newPage, newOptions)
 			//then get the actual query.
 			.then( function() {
 				if(!!newOptions) {

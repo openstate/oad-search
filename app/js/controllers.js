@@ -1,8 +1,42 @@
 var OCDAppCtrl = angular.module('OCDAppControllers', ['OCDAppServices']);
 
+//this controler controlls the home screen
+OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
+	function ($scope, QueryService) {
+		
+		QueryService.simplehttpGet("de || het || een").then(function(data){
+			$scope.sourcelist = data.facets.collection.terms;
+		});
+
+
+		//get the first restult of six example query's. 
+		var examplequeries = ["Rembrandt", "De ark van Noach", "schotel","Monet","Rotterdam","van Gogh"];
+		$scope.examplelist = [];
+		for(var i=0; i < examplequeries.length; i++){
+			QueryService.simplehttpGet(examplequeries[i])
+			.then(function(data){
+				$scope.examplelist.push({
+					title:data.query,
+					firstresult:[data.results[0]]
+				});
+			});
+		}
+
+		$scope.goToQuery = function(){
+			QueryService.newSearchString(this.item.title);
+		};
+		
+
+
+
+
+
+	}]);
+
 //this controlls the query screen
 OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 	function ($scope, QueryService) {
+
 
 		//get the data from the Queryservice
 		data = QueryService.getData();
@@ -67,10 +101,10 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 //this controller parses all the itemdetail data. 
 OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 	function ($scope, $http) {
+	
 		//add the needed variables to the scope.
 		$scope.apiId = $scope.item._id || "";
 		var itemsource = $scope.item._source;
-
 		$scope.title = itemsource.title || "Title unknown";
 
 		//show the first author

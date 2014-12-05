@@ -1,0 +1,29 @@
+<div class="container-fluid">
+  <div class="col-xs-12">
+    <h1>Open Cultuur data Search</h1>
+  </div>
+  <div class="col-xs-4">
+    Welkom op de open cultuur data zoek pagina, voer hierboven een zoekopdracht in, of klik hiernaast op één van de voorbeeld zoekopdrachten om gelijk te beginnen.<br><br>
+    Op dit moment zijn komen de volgende bronnen voor in de api:<br><br>
+    
+    <table>
+      <tr><td><b>Bron</b></td><td><b>Items</b></td></tr>
+      <tr ng-repeat="source in sourcelist">
+        <td>{{source.term}}</td>
+        <td>{{source.count}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-xs-8">
+    <!--display the results -->
+    <div ng-repeat="item in examplelist" class="col-sm-6 col-md-4">
+      <div class="thumbnail thumbnail-frontpage" ng-click="goToQuery()" >
+        <h4>{{item.title}}</h4>
+        <div ng-repeat="item in item.firstresult"  ng-controller="ItemCtrl">
+          <a class="thumb-image" style="background-image: url({{imgurl}})"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

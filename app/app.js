@@ -8,8 +8,12 @@ var OCDApp = angular.module('OCDApp', [
 
 //the routeprovider is responcible for the url management.
 OCDApp.config(['$routeProvider',
-  function($routeProvider) {
+   function($routeProvider) {
     $routeProvider.
+    when('/', {
+      templateUrl: 'app/partials/home.html',
+      controller: 'homeCtrl'
+    }).
     when('/query/:q', {
       redirectTo: '/query/:q/page/1'
     }).
