@@ -4,13 +4,15 @@ var OCDAppCtrl = angular.module('OCDAppControllers', ['OCDAppServices']);
 OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 	function ($scope, QueryService) {
 		
+		QueryService.clearQuery();
+
 		QueryService.simplehttpGet("de || het || een").then(function(data){
 			$scope.sourcelist = data.facets.collection.terms;
 		});
 
 
 		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt", "De ark van Noach", "schotel","Monet","Rotterdam","van Gogh"];
+		var examplequeries = ["Rembrandt", "De ark van Noach", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){
 			QueryService.simplehttpGet(examplequeries[i])

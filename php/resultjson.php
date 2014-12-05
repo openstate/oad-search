@@ -51,17 +51,28 @@ $media_content_type_terms = array('image/jpeg','image/jpg','image/gif','image/pn
 $q = filter_input(INPUT_GET, 'q') ? filter_input(INPUT_GET, 'q') : DEF_QUERY;
 $collection = filter_input(INPUT_GET, 'collection') ? filter_input(INPUT_GET, 'collection') : null;
 $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : $page ;
-$options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : null;
+$options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : FALSE;
 
-$facets = array(
-    'collection' => array($collection),
-    'date'  =>  array(
-        'interval' => 'year'
-        ),
-    'author' => array(),
-    'rights' => array()
+$use_facets = filter_input(INPUT_GET, 'use_facets') ? filter_input(INPUT_GET, 'use_facets') : TRUE;
+$use_facets = $use_facets === 'false'? false: true;
 
+//to not use unnessacery recources, only use facets if needed.
+if($use_facets){
+    $facets = array(
+        'collection' => array($collection),
+        'date'  =>  array(
+            'interval' => 'year'
+            ),
+        'author' => array(),
+        'rights' => array()
+
+        );
+} else {
+    $facets = array(
+        //the OCD script cant handle empty facet. For now use only one facet. TODO: fix.
+        'collection' => array(),
     );
+}
 
 $filters = array(
     'media_content_type' => array(
@@ -70,7 +81,7 @@ $filters = array(
     );
 
 
-if(isset($options) ){
+if($options){
     $LZString = new LZString();
     $options = json_decode ($LZString->decompressFromBase64($options), true);
     

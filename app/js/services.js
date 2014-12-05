@@ -39,9 +39,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		}
 
 		//ajax call to the php script return a promise.
-		function getHttp(newQuery, newPage, newOptions){
-			
-			return $http.get('php/resultjson.php', {params:{q:newQuery, page:newPage, options:newOptions}})
+		function getHttp(newQuery, newPage, newOptions, useFacets){
+			return $http.get('php/resultjson.php', {params:{q:newQuery, page:newPage, options:newOptions, use_facets:useFacets}})
 			.then(function(data) {
 				
 				if(data.error){
@@ -58,7 +57,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		}
 
 		queryService.simplehttpGet = function(newQuery){
-			return getHttp(newQuery, 1);
+			//for the simple get no facets or options are needed.
+			return getHttp(newQuery, 1, undefined, false);
 		};
 
 
@@ -183,6 +183,13 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					};
 				}
 			}
+		};
+
+		//clear the query, if navegating to home screen.
+		queryService.clearQuery = function(){
+			$rootScope.$broadcast('New Query', {
+				query: "",
+			});
 		};
 
 		//move to the requested page.
