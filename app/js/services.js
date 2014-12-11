@@ -336,6 +336,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 //
 function toJSONandCompres(obj){
+
 	return window.LZString.compressToBase64(JSON.stringify(obj));
 }
 
