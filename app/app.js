@@ -14,6 +14,9 @@ OCDApp.config(['$routeProvider',
       templateUrl: 'app/partials/home.html',
       controller: 'homeCtrl'
     }).
+    when('/more', {
+      templateUrl: 'app/partials/more.html'
+    }).
     when('/query/:q', {
       redirectTo: '/query/:q/page/1'
     }).
@@ -48,7 +51,7 @@ OCDApp.config(['$routeProvider',
       
       
 
-      redirectTo: '/query/rembrandt/page/1'
+      redirectTo: '/'
     });
 
 

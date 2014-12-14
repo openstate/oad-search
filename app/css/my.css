@@ -1,11 +1,59 @@
  body {
  	padding-top: 70px;
  	padding-bottom: 70px;
+ 	overflow-x:hidden;
  }
+
+.hometable{
+	width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
+  }
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -61.6%;
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -61.6%;
+  }
+  .row-offcanvas-right.active {
+    right: 61.6%;
+  }
+  .row-offcanvas-left.active {
+    left: 61.6%;
+  }
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 61.6%;
+    padding-left: 30px;
+
+  }
+  #sidebar {
+    padding-top:0;
+  }
+}
+
+ #sidebar {
+    background-color:#eee;
+	overflow:hidden;
+}
 
  .orange{
  	color:#dd4814;
  }
+
+ .white {
+  color: #fff;
+}
 
  .thumbnail {
  	height: 644px;

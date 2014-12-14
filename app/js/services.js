@@ -42,6 +42,14 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		function getHttp(newQuery, newPage, newOptions, useFacets){
 			return $http.get('php/resultjson.php', {params:{q:newQuery, page:newPage, options:newOptions, use_facets:useFacets}})
 			.then(function(data) {
+
+				
+
+				if(typeof(data.data) == "String" && data.data.substring(0, 5) == "<?php"){
+					throw {
+						message: 'please turn on php on you\'re webserver'
+					};
+				}
 				
 				if(data.error){
 					console.log("phperror");
@@ -52,6 +60,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 					};
 				}
 				data.data.query = newQuery;
+				//debugger;
 				return data.data;
 			});
 		}
@@ -311,21 +320,23 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 				options[facetname] = optiondata;
 
 			var urlstring;
+
 			//if options is not empty encode option.
 			if(!jQuery.isEmptyObject(options)){
 				var encodeOptions = base64url_encode(options);
 				
 				urlstring = 'query/'+query+"/page/1/options/"+encodeOptions;
 			}
-			else
+			else {
 				urlstring = 'query/'+query+"/page/1";
-			
-			//console.log(options);
-			//console.log(urlstring);
 
+				//clear the optionstring
+				optionsString = undefined;
+			}
+			
 			$location.path(urlstring);
 			
-			//the daterange slider, does not start a digest, so start manualy.
+			//the daterange slider does not start a digest, so start manualy.
 			if(facetname == 'date' && $rootScope.$$phase != '$apply' && $rootScope.$$phase != '$digest'){
 				$rootScope.$apply();
 			}

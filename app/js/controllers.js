@@ -287,22 +287,30 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 	]);
 
 //this controller controlls the navbar.
-OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService',
-	function ($scope, QueryService) {
+OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location',
+	function ($scope, QueryService, $location) {
 
 		$scope.query = "";
 
-		//the Navbar renders a before the router, so it needs to listen for a new query.
-		//if QueryService broadcasts a new query, update the query in the navbar
-		$scope.$on('New Query', function (event, data) {
-			$scope.query = data.query;
-		});
+	    var data = QueryService.getData();
+		$scope.query = data.query;
+
+		if($location.$$path.substring(0,6) == "/query")
+			$scope.onquerypage = true;
+		else
+			$scope.onquerypage = false;
+
+		
 
 		//call the service and notify them of a new search query
 		$scope.search = function(){
 			QueryService.newSearchString($scope.query);
 		};
 
+		$scope.showsidebar = function (){
+			console.log($('.row-offcanvas'));
+			 $('.row-offcanvas').toggleClass('active');
+		}
 
 		$scope.suggest = function(){
 			//TODO create suggest function.
