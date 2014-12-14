@@ -14,8 +14,8 @@ OCDApp.config(['$routeProvider',
       templateUrl: 'app/partials/home.html',
       controller: 'homeCtrl'
     }).
-    when('/more', {
-      templateUrl: 'app/partials/more.html'
+    when('/about', {
+      templateUrl: 'app/partials/about.html'
     }).
     when('/query/:q', {
       redirectTo: '/query/:q/page/1'

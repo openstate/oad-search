@@ -12,7 +12,7 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		});
 
 		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt", "De ark van Noach", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
+		var examplequeries = ["Rembrandt olieverf", "De ark van Noach", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
 		
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){
@@ -159,9 +159,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 			$http.get('php/resolve_rijks_url.php', {params:{url:myMediaItem}}).success(function(data) {
 
 				if(data.error){
-					console.log("phperror");
 					console.log(data.error);
-					alert("Error: php-failed");
 					queryData = false;
 					return;
 				}
