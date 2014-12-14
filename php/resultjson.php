@@ -54,7 +54,7 @@ $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : $pag
 $options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : FALSE;
 
 $use_facets = filter_input(INPUT_GET, 'use_facets') ? filter_input(INPUT_GET, 'use_facets') : TRUE;
-$use_facets = $use_facets === 'false'? false: true;
+$use_facets = $use_facets === 'false'? FALSE : TRUE;
 
 //to not use unnessacery recources, only use facets if needed.
 if($use_facets){
@@ -86,7 +86,7 @@ if($options){
     $options = json_decode ($LZString->decompressFromBase64($options), true);
     
     foreach ($options as $key => $termlist){
-       if($key == 'date'){
+        if($key == 'date'){
             $filters['date'] = array(
                 'from' => $termlist['usermin'].'-01-01',
                 'to' => $termlist['usermax'].'-12-31'

@@ -6,13 +6,14 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		
 		QueryService.clearQuery();
 
+		//temp solution, changed if a better option is available.
 		QueryService.simplehttpGet("de || het || een").then(function(data){
 			$scope.sourcelist = data.facets.collection.terms;
 		});
 
-
 		//get the first restult of six example query's. 
 		var examplequeries = ["Rembrandt", "De ark van Noach", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
+		
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){
 			QueryService.simplehttpGet(examplequeries[i])
@@ -27,11 +28,6 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		$scope.goToQuery = function(){
 			QueryService.newSearchString(this.item.title);
 		};
-		
-
-
-
-
 
 	}]);
 
@@ -100,7 +96,7 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
 
 	}]);
 
-//this controller parses all the itemdetail data. 
+//this controller parses all the item detail data. 
 OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 	function ($scope, $http) {
 	
@@ -181,8 +177,8 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 	}]);
 
 //this controller controlls the leftbar .
-OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
-	function ($scope, QueryService) {
+OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService',
+	function ($scope, QueryService, StateService) {
 		//get the data from the Queryservice
 		var data = QueryService.getData();
 		if(data){
@@ -198,6 +194,9 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 
 			$scope.rights = QueryService.getFacet('rights', false);
 			setResetButtonState('rights');
+
+			if(StateService.sidebarOpen === true)
+				$('.row-offcanvas').toggleClass('active');
 			
 			$scope.showValues = true;
 			
@@ -287,12 +286,12 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService',
 	]);
 
 //this controller controlls the navbar.
-OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location',
-	function ($scope, QueryService, $location) {
+OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location', 'StateService',
+	function ($scope, QueryService, $location, StateService) {
 
 		$scope.query = "";
 
-	    var data = QueryService.getData();
+		var data = QueryService.getData();
 		$scope.query = data.query;
 
 		if($location.$$path.substring(0,6) == "/query")
@@ -300,17 +299,19 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location',
 		else
 			$scope.onquerypage = false;
 
-		
-
 		//call the service and notify them of a new search query
 		$scope.search = function(){
 			QueryService.newSearchString($scope.query);
 		};
 
 		$scope.showsidebar = function (){
-			console.log($('.row-offcanvas'));
-			 $('.row-offcanvas').toggleClass('active');
-		}
+			if($('.row-offcanvas.active').length === 0)
+				StateService.sidebarOpen = true;
+			else
+				StateService.sidebarOpen = false;
+
+			$('.row-offcanvas').toggleClass('active');
+		};
 
 		$scope.suggest = function(){
 			//TODO create suggest function.

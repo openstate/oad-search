@@ -92,6 +92,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 					for (var prop in excludeoptions){
 						if(excludeoptions.hasOwnProperty(prop)){
+
 							//date is the only option that is not a exlusion list.
 							if(prop == 'date'){
 								includeoptions[prop] = excludeoptions[prop];
@@ -320,11 +321,9 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 				options[facetname] = optiondata;
 
 			var urlstring;
-
 			//if options is not empty encode option.
 			if(!jQuery.isEmptyObject(options)){
 				var encodeOptions = base64url_encode(options);
-				
 				urlstring = 'query/'+query+"/page/1/options/"+encodeOptions;
 			}
 			else {
@@ -333,7 +332,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 				//clear the optionstring
 				optionsString = undefined;
 			}
-			
+
 			$location.path(urlstring);
 			
 			//the daterange slider does not start a digest, so start manualy.
@@ -344,6 +343,14 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		//return the factory.
 		return queryService;
 	}]);
+
+
+OCDAppServ.factory('StateService' , function(){
+	var stateService = {};
+	stateService.sidebarOpen = false;
+	return stateService;
+});
+
 
 //
 function toJSONandCompres(obj){
@@ -363,4 +370,3 @@ function base64url_encode(obj) {
 function base64url_decode(string) {
 	return decompresToObject(string.split('-').join('/'));
 }
-
