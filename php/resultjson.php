@@ -41,7 +41,9 @@ $page = 1;
 // 'van gogh executie' (only 3 results)
 // 'rijksmuseum (about 5800 results)
 define("DEF_QUERY", "rembrandt+olieverf"); // gives nice results
-$media_content_type_terms = array('image/jpeg','image/jpg','image/gif','image/png');
+
+
+
 
 /*
  * The action
@@ -76,7 +78,7 @@ if($use_facets){
 
 $filters = array(
     'media_content_type' => array(
-        'terms' => $media_content_type_terms
+        'terms' => array('image/jpeg','image/jpg','image/gif','image/png')
         )
     );
 
@@ -91,6 +93,9 @@ if($options){
                 'from' => $termlist['usermin'].'-01-01',
                 'to' => $termlist['usermax'].'-12-31'
             );
+       } else if($key == 'onlyvideo'){
+        
+            $filters['media_content_type']['terms'] = array('video/mp4', 'video/ogg', 'video/webm');
        } else {
             $filters[$key] = array(
                 'terms' => $termlist

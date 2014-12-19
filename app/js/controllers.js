@@ -12,7 +12,7 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		});
 
 		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt olieverf", "De ark van Noach", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
+		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
 		
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){
@@ -134,13 +134,23 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 
 
 		var myMediaItem;
+
+		$scope.showPlayer = false;
+		$scope.videosources = [];
+
+		
 		//resolve the image.
 		for (var i = 0; i < itemsource.media_urls.length; i++) {
 			mediaItem = itemsource.media_urls[i];
 			
 			// Skip the non-image media content type (for example Openbeelden videos)
-			if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1)
+			if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1){
+				if(['video/mp4', 'video/ogg', 'video/webm'].indexOf(mediaItem.content_type) > -1){
+					$scope.showPlayer = true;
+					$scope.videosources.push(mediaItem);
+				}
 				continue;
+			}				
 
 			// Pick the 500px image (Beeldbank Nationaal Archief)
 			if(mediaItem && mediaItem.width == 500){
@@ -152,7 +162,9 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http',
 			myMediaItem = mediaItem.url;
 
 		}
-		
+		//console.log($scope.multimediasources);
+
+
 		//get redirect location of the OpenCultuurData Resolver URLs
 		//We use this as a temporary solution to get smaller sized images from Rijksmuseum
 		if(itemsource.meta.collection == "Rijksmuseum"){
@@ -280,6 +292,19 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService',
 			}
 			QueryService.setFilterOption(facetname, exclude);
 		};
+
+		if(QueryService.getFilterOption('onlyvideo') == true){
+			$scope.videofilter = true;
+		}
+		
+		$scope.toggleVideo = function(){
+			if($scope.videofilter){
+				QueryService.setFilterOption('onlyvideo', true);
+			}
+			else {
+				QueryService.setFilterOption('onlyvideo', []);
+			}
+		}
 	}
 	]);
 

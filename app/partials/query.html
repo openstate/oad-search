@@ -32,7 +32,14 @@
     <!--display the results -->
     <div ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4">
       <div class="thumbnail" >
-        <a href="{{imgurlref}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
+        <div class="thumb-image-container">
+        <video  ng-show="showPlayer" width="100%" height="100%" controls poster="{{imgurl}}" preload='none'>
+          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
+     
+          Your browser does not support the video tag.
+        </video>
+        <a ng-hide="showPlayer" href="{{imgurlref}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
+      </div>
         <div class="caption">
           <div class="thumb-body"> 
             <h4>{{title}}</h4>
