@@ -3,7 +3,7 @@
   <div ng-repeat="facet in collection">
     <label class="checkbox" for="{{facet.name}}">
       <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('collection')">
-      {{facet.name}} <small>({{facet.count}})</small>
+      {{facet.name}} <small class="pull-right">({{facet.count}})</small>
     </label>
   </div>
   <h3 class="demo-panel-title">Filters</h3>
@@ -18,7 +18,7 @@
   <div ng-repeat="facet in author">
     <label class="checkbox" for="{{facet.name}}">
       <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('author')">
-      {{facet.name}} <small>({{facet.count}})</small>
+      {{facet.name}} <small class="pull-right">({{facet.count}})</small>
     </label>
   </div>
   <br>
@@ -28,7 +28,7 @@
   <div ng-repeat="facet in rights">
     <label class="checkbox" for="{{facet.name}}">
       <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('rights')">
-      {{facet.name}} <small>({{facet.count}})</small>
+      {{facet.name}} <small class="pull-right">({{facet.count}})</small>
     </label>
   </div>
   <br>
