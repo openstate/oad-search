@@ -122,19 +122,11 @@ if ($q) {
     $total = $ocd->total();
     $count_pages = ceil($total / $size);
 
-    $jsonreturn = array(
+    /*echo'<pre>';
+    print_r($results);
+    echo'</pre>';*/
 
-            "facets" => $results->get_facets(),
-            "results" => array(),
-            "pages" => $count_pages
-
-            );
-
-    foreach($results as $item){
-        array_push($jsonreturn['results'], $item);
-    }
- 
-    echo json_encode($jsonreturn, JSON_PRETTY_PRINT);
+    echo json_encode(new JsonReturn($results, $count_pages), JSON_PRETTY_PRINT);
 }
 
 
