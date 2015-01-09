@@ -12,7 +12,7 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		});
 
 		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt olieverf", "De ark van Noach", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
+		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
 		
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){

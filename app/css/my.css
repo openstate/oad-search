@@ -2,7 +2,13 @@
  	padding-top: 70px;
  	padding-bottom: 70px;
  	overflow-x:hidden;
+  width:100%;
  }
+
+.mycontainer {
+  overflow-x:hidden;
+  width:100%;
+}
 
 .hometable{
 	width: 100%;
@@ -17,24 +23,24 @@
   }
   .row-offcanvas-right
   .sidebar-offcanvas {
-    right: -61.6%;
+    right: -80%;
   }
 
   .row-offcanvas-left
   .sidebar-offcanvas {
-    left: -61.6%;
+    left: -80%;
   }
   .row-offcanvas-right.active {
-    right: 61.6%;
+    right: 80%;
   }
   .row-offcanvas-left.active {
-    left: 61.6%;
+    left: 80%;
   }
   .sidebar-offcanvas {
     position: absolute;
     top: 0;
-    width: 61.6%;
-    padding-left: 30px;
+    width: 80%;
+    padding-left: 40px;
 
   }
   #sidebar {
