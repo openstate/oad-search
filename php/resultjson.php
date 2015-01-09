@@ -18,7 +18,7 @@ class JsonReturn implements JsonSerializable {
         $jsonreturn = array(
 
             "facets" => $this->result->get_facets(),
-            "results" => [],
+            "results" => array(),
             "pages" => $this->count_pages
 
             );
