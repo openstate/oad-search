@@ -43,8 +43,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			return $http.get('php/resultjson.php', {params:{q:newQuery, page:newPage, options:newOptions, use_facets:useFacets}})
 			.then(function(data) {
 
-				
-
 				if(typeof(data.data) == "String" && data.data.substring(0, 5) == "<?php"){
 					throw {
 						message: 'please turn on php on you\'re webserver'
@@ -94,7 +92,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 						if(excludeoptions.hasOwnProperty(prop)){
 
 							//date is the only option that is not a exlusion list.
-							if(prop == 'date'){
+							if(prop == 'date' || prop == 'onlyvideo'){
 								includeoptions[prop] = excludeoptions[prop];
 								continue;
 							}

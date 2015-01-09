@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Demo Angular script, uses the OCD PHP script to communicate with the the Open Cultuur Data Restful API. Basic search on _open cultuur data_ containing at least 1 image, displayed as a thumbnail gallery.
+ Angular SPA, uses the OCD PHP script to communicate with the the Open Cultuur Data Restful API. Basic search on _open cultuur data_ containing at least 1 image, displayed as a thumbnail gallery.
 
 ## Documentation
 
@@ -11,6 +11,7 @@ The documentation of the Open Cultuur API can be found at [docs.opencultuurdata.
 ## Installation
 
 plcae contains on a webserver which runs PHP and libcurl.
+use bower to install dependencies
 
 ## Authors
 

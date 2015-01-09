@@ -74,6 +74,15 @@ OCDApp.config(['$provide', function($provide) {
             }]);
         }]);
 
+OCDApp.config(function($sceDelegateProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+    // Allow same origin resource loads.
+    'self',
+    // Allow loading from our assets domain.  Notice the difference between * and **.
+    'http://api.opencultuurdata.nl/**'
+  ]);
+});
+
 //here the rootscope object loadingview is set, the loading view is based on this variable.
 OCDApp.run(['$rootScope', function($root) {
   $root.$on('$routeChangeStart', function(e, curr, prev) {

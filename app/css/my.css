@@ -74,10 +74,14 @@
  .thumbnail .caption {
  	padding: 0px 0px;
  }
+ .thumb-image-container {
+  display: block;
+  height: 400px;
+ }
 
  .thumb-image {
- 	display: block;
- 	height: 400px;
+  height: 400px;
+  display: block;
  	background-repeat: no-repeat;
  	background-position: center center;
  	background-size: cover;
