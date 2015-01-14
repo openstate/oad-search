@@ -355,6 +355,16 @@ OCDAppServ.factory('StateService' , function(){
 });
 
 
+OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$location', '$q',
+	function($rootScope, $http, $location, $q){
+		var detailService = {};
+
+
+
+		
+		return detailService;
+	}]);	
+
 //
 function toJSONandCompres(obj){
 

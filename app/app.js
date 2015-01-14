@@ -19,6 +19,10 @@ OCDApp.config(['$routeProvider',
       templateUrl: 'app/partials/about.html',
       controller: 'aboutCtrl'
     }).
+    when('/object/:objecthash', {
+      templateUrl: 'app/partials/about.html',
+      controller: 'detailCtrl'
+    }).
     when('/query/:q', {
       redirectTo: '/query/:q/page/1'
     }).
