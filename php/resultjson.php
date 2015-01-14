@@ -6,28 +6,6 @@ include_once 'errortoJSON.php';
 include_once 'ocd.php';
 include_once 'LZString.php';
 
-//this class returns a object with the relevant data in JSONformat;
-class JsonReturn implements JsonSerializable {
-
-    public function __construct($result, $count_pages) {
-        $this->result = $result;
-        $this->count_pages = $count_pages;
-    }
-
-    public function jsonSerialize() {
-        $jsonreturn = array(
-
-            "facets" => $this->result->get_facets(),
-            "results" => array(),
-            "pages" => $this->count_pages
-
-            );
-        foreach($this->result as $item){
-            array_push($jsonreturn['results'], $item);
-        }
-        return $jsonreturn;
-    }
-}
 
 /*
  * Default values 
@@ -134,7 +112,7 @@ if ($q) {
         array_push($jsonreturn['results'], $item);
     }
  
-    echo json_encode($jsonreturn, JSON_PRETTY_PRINT);
+    echo json_encode($jsonreturn);
 }
 
 

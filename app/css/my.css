@@ -6,8 +6,7 @@
  }
 
 .mycontainer {
-  overflow-x:hidden;
-  width:100%;
+   width:100%;
 }
 
 .hometable{
@@ -131,6 +130,4 @@
  	padding-right: 35px;
  }
 
-.ngrs-handle{
-  margin: -5px 0 0 0;
-}
+

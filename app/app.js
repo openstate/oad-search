@@ -1,6 +1,7 @@
 //define youre app and declare dependencies
 var OCDApp = angular.module('OCDApp', [
 	'ngRoute',           //routes used below
+  'ngTouch',
   'ui-rangeSlider',    //range-slider used in left bar       
   'OCDAppServices',    //our services
   'OCDAppControllers'  //our controlers
@@ -15,7 +16,8 @@ OCDApp.config(['$routeProvider',
       controller: 'homeCtrl'
     }).
     when('/about', {
-      templateUrl: 'app/partials/about.html'
+      templateUrl: 'app/partials/about.html',
+      controller: 'aboutCtrl'
     }).
     when('/query/:q', {
       redirectTo: '/query/:q/page/1'

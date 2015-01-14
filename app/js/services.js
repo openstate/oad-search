@@ -195,10 +195,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 		//clear the query, if navegating to home screen.
 		queryService.clearQuery = function(){
-			$rootScope.$broadcast('New Query', {
-				query: "",
-			});
-		};
+			query = "";
+			};
 
 		//move to the requested page.
 		queryService.moveToPage = function(newPage){
@@ -338,6 +336,13 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 				$rootScope.$apply();
 			}
 		};
+
+		queryService.clearFilterOptions = function(){
+			options = {};
+			optionsString = undefined;
+			basefacets = false;
+		}
+
 		//return the factory.
 		return queryService;
 	}]);

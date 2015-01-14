@@ -5,11 +5,14 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 	function ($scope, QueryService) {
 		
 		QueryService.clearQuery();
+		QueryService.clearFilterOptions();
 
 		//temp solution, changed if a better option is available.
 		QueryService.simplehttpGet("de || het || een").then(function(data){
 			$scope.sourcelist = data.facets.collection.terms;
 		});
+
+
 
 		//get the first restult of six example query's. 
 		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
@@ -31,11 +34,33 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 
 	}]);
 
+	OCDAppCtrl.controller('aboutCtrl', ['QueryService',
+		function ( QueryService) {
+		
+			QueryService.clearQuery();
+			QueryService.clearFilterOptions();
+	}]);
+
+
+
 //this controlls the query screen
-OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService',
-	function ($scope, QueryService) {
+OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
+	function ($scope, QueryService, StateService) {
 
-
+		$scope.closeMenu = function(){
+			if($('.row-offcanvas.active').length > 0)
+			{
+				StateService.sidebarOpen = false;
+				$('.row-offcanvas').toggleClass('active');
+			}
+			
+		}
+		$scope.openMenu = function(){
+			if($('.row-offcanvas.active').length === 0){
+				StateService.sidebarOpen = true;
+				$('.row-offcanvas').toggleClass('active');
+			}
+		}
 		//get the data from the Queryservice
 		data = QueryService.getData();
 		console.log(data);
