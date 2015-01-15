@@ -20,7 +20,7 @@ OCDApp.config(['$routeProvider',
       controller: 'aboutCtrl'
     }).
     when('/object/:objecthash', {
-      templateUrl: 'app/partials/about.html',
+      templateUrl: 'app/partials/details.html',
       controller: 'detailCtrl'
     }).
     when('/query/:q', {

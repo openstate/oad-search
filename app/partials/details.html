@@ -2,11 +2,36 @@
   <div ng-include="'app/partials/nav.html'"></div>
     <!--include the bootstrap modal for alerts  -->
   <div ng-include="'app/partials/error.html'"></div>
-  <div class="container-fluid">
+
+<div class="container-fluid">
+	<div ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4 col-lg-4">
+	<h4>{{title}}</h4>
+      <div >
+        <div class="thumb-image-container">
+        <video  ng-show="showPlayer" width="100%" height="100%" controls poster="{{imgurl}}" preload='none'>
+          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
+     
+          Your browser does not support the video tag.
+        </video>
+        <a ng-hide="showPlayer" href="{{imgurlref}}" class="thumb-image" style="background-image: url({{imgurlref}})"></a>
+      </div>
+        <div class="caption">
+          <div class="thumb-body"> 
+            <h4>{{title}}</h4>
+            <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> {{date}}</p>
+            <p>{{rights}}</p>
+          </div>
+          <div class="thumb-footer">  
+            <hr>
+            <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
+            <p><small><a href="{{apiUrl}}">{{apiId}}</a></small></p>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-
-
-  </div>
-  </div>
-  </div>
+</div>
+</div>
+</div>
+</div>

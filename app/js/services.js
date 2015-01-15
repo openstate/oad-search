@@ -359,6 +359,16 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$location', '$q',
 	function($rootScope, $http, $location, $q){
 		var detailService = {};
 
+		//encode the url
+		detailService.encodeUrl = function (url) {
+			return '#/object/' + compresString(url.substring(33));
+		}
+		
+		//decode the url
+		detailService.getItem = function (encodedUrl) {
+			var url = "http://api.opencultuurdata.nl/v0/" + decompresString(encodedUrl);
+			return $http.get(url);
+		}
 
 
 		
@@ -369,6 +379,14 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$location', '$q',
 function toJSONandCompres(obj){
 
 	return window.LZString.compressToBase64(JSON.stringify(obj));
+}
+
+function compresString (string) {
+	return window.LZString.compressToBase64(string).split('/').join('-');
+}
+
+function decompresString (compresedString){
+	return window.LZString.decompressFromBase64(compresedString.split('-').join('/'));
 }
 
 function decompresToObject(string){
