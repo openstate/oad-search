@@ -355,22 +355,23 @@ OCDAppServ.factory('StateService' , function(){
 });
 
 
-OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$location', '$q',
-	function($rootScope, $http, $location, $q){
+OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$location', '$q','$routeParams',
+	function($rootScope, $http, $location, $q, $routeParams){
 		var detailService = {};
 
 		//encode the url
-		detailService.encodeUrl = function (url) {
-			return '#/object/' + compresString(url.substring(33));
+		detailService.getURL = function (url) {
+			var urlpath = url.split( '/' );
+			return '#/object/' + urlpath[4] + '/' + urlpath[5] ;
 		}
 		
-		//decode the url
-		detailService.getItem = function (encodedUrl) {
-			var url = "http://api.opencultuurdata.nl/v0/" + decompresString(encodedUrl);
-			return $http.get(url);
+		detailService.getApiUrl = function () {
+			return url = "http://api.opencultuurdata.nl/v0/" + $routeParams.collection + '/' + $routeParams.objectid;
 		}
 
-
+		detailService.getItem = function () {
+			return $http.get(detailService.getApiUrl());
+		}
 		
 		return detailService;
 	}]);	

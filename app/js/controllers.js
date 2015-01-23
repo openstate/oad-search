@@ -12,8 +12,6 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 			$scope.sourcelist = data.facets.collection.terms;
 		});
 
-
-
 		//get the first restult of six example query's. 
 		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
 		
@@ -124,41 +122,53 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
 //this controller parses all the item detail data. 
 OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 	function ($scope, $http, DetailService) {
-		//add the needed variables to the scope.
 		
-		$scope.apiId = $scope.item._id || "";
-		var itemsource = $scope.item._source;
+		//itemcontrolelr is used for both the detailview and the queryview, so find out witch one.
+		var isDetailView = (!!$scope.item.title ? true : false);
+		var isQueryView = (!!$scope.item._id ? true : false);
 
-		if(itemsource){
-			$scope.title = itemsource.title || "Title unknown";
+		var itemDetails;
+		if(isQueryView){
+			itemDetails = $scope.item._source;
+			$scope.apiId = $scope.item._id || "";
+			$scope.apiUrl = itemDetails.meta.ocd_url || "";
+			$scope.detailUrl = DetailService.getURL($scope.apiUrl);
+		}
+
+		else if(isDetailView){
+			itemDetails = $scope.item;
+			$scope.apiUrl = DetailService.getApiUrl();
+			$scope.apiId = $scope.apiUrl.split('/')[5];
+		}
+
+		if(isQueryView || isDetailView){
+			$scope.title = itemDetails.title || "Title unknown";
 					
 			//show the first author
-			$scope.author = itemsource.authors && itemsource.authors[0] || "Author unknown";
+			$scope.author = itemDetails.authors && itemDetails.authors[0] || "Author unknown";
 			
 			//if more authors, show the three dots and add title text.
-			if(itemsource.authors && itemsource.authors.length > 1) {
+			if(itemDetails.authors && itemDetails.authors.length > 1) {
 				$scope.authorhooverindicate = "...";
 				
 				var hoovertext = "";
-				for(var i = 0; i < itemsource.authors.length; i++) {
-					hoovertext += itemsource.authors[i] + ' / ';
+				for(var i = 0; i < itemDetails.authors.length; i++) {
+					hoovertext += itemDetails.authors[i] + ' / ';
 				}
 				
 				$scope.authorhoover = hoovertext.slice(0,-3);
-
 			}
 
-			$scope.collection = itemsource.meta.collection || "Collection unknown";
-			$scope.originalCollectionUrl = itemsource.meta.original_object_urls.html || "";
-			$scope.apiUrl = itemsource.meta.ocd_url || "";
-			$scope.rights = itemsource.meta.rights || "";
+			$scope.collection = itemDetails.meta.collection || "Collection unknown";
+			$scope.originalCollectionUrl = itemDetails.meta.original_object_urls.html || "";
 			
-			$scope.detailUrl = DetailService.encodeUrl($scope.apiUrl);
+			$scope.rights = itemDetails.meta.rights || "";
+			$scope.description = itemDetails.description;
+			
+			
 
-
-			//show the datestamp as full year.	
-			if(itemsource.date){
-				var d = new Date(itemsource.date);
+			if(itemDetails.date){
+				var d = new Date(itemDetails.date);
 				$scope.date = d.getFullYear();
 			}
 
@@ -167,11 +177,10 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 
 			$scope.showPlayer = false;
 			$scope.videosources = [];
-
 			
 			//resolve the image.
-			for (var i = 0; i < itemsource.media_urls.length; i++) {
-				mediaItem = itemsource.media_urls[i];
+			for (var i = 0; i < itemDetails.media_urls.length; i++) {
+				mediaItem = itemDetails.media_urls[i];
 				
 				// Skip the non-image media content type (for example Openbeelden videos)
 				if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1){
@@ -190,14 +199,22 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 
 				// or pick the last image left (for example Rijksmuseum, Openbeelden)
 				myMediaItem = mediaItem.url;
-
+				
 			}
-			//console.log($scope.multimediasources);
+			$scope.imgurlref = myMediaItem;
+			$scope.imgurl = myMediaItem;
+		}
+
+		if(isDetailView){
+			//DetailService
+		}
 
 
+		if(isQueryView){
+	
 			//get redirect location of the OpenCultuurData Resolver URLs
 			//We use this as a temporary solution to get smaller sized images from Rijksmuseum
-			if(itemsource.meta.collection == "Rijksmuseum"){
+			if(itemDetails.meta.collection == "Rijksmuseum"){
 				$http.get('php/resolve_rijks_url.php', {params:{url:myMediaItem}}).success(function(data) {
 
 					if(data.error){
@@ -210,28 +227,20 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 					$scope.imgurlref = myMediaItem;
 					$scope.imgurl = data.url.replace('%3Ds0', '=s450');
 				});
-			}else{
-				$scope.imgurlref = myMediaItem;
-				$scope.imgurl = myMediaItem;
-			
-			}
-			console.log($scope.imgurl);
+			}			
 		}
+		
 	}]);
 
 //this controller if for the detail view. 
-OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','$routeParams','DetailService',
-	function ($scope, $http, $routeParams, DetailService) {
-		console.log($routeParams.objecthash);
-		var objectPromise = DetailService.getItem($routeParams.objecthash);
+OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','DetailService',
+	function ($scope, $http, DetailService) {
+		var objectPromise = DetailService.getItem();
 
+		//TODO: I shoudl not use a ng-repeat for a single item.
 		$scope.results = [];
 		objectPromise.then(function(data) {
-			console.log(data);
-			var itemObj = {
-				"_source":data.data
-			}
-			$scope.results.push(itemObj);
+			$scope.results.push(data.data);
 		});
 	}]);
 

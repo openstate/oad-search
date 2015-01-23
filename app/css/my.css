@@ -1,14 +1,21 @@
  body {
  	padding-top: 70px;
- 	padding-bottom: 70px;
+
  	overflow-x:hidden;
   width:100%;
+  height: 100%;
  }
+
+html{height:100%;}
 
 .mycontainer {
    width:100%;
+   height:100%;
 }
 
+.fullheight{
+  height:100%;
+}
 .hometable{
 	width: 100%;
 }
@@ -86,6 +93,7 @@
  	background-size: cover;
  }
 
+
  .thumb-body {
  	padding: 0px 9px;
  	height: 160px;
@@ -130,4 +138,24 @@
  	padding-right: 35px;
  }
 
+ .detail-image {
+  height: 100%;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+ }
+
+
+ .detail-side-bar{
+  background-color: rgb(219, 219, 219);
+  padding-bottom: 50px;
+ }
+ @media screen and (min-width: 992px) {
+ .detail-side-bar{
+  height: 100%;
+  padding-bottom:0;
+ }
+
+ }
 
