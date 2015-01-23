@@ -355,8 +355,8 @@ OCDAppServ.factory('StateService' , function(){
 });
 
 
-OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$location', '$q','$routeParams',
-	function($rootScope, $http, $location, $q, $routeParams){
+OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
+	function($rootScope, $http, $routeParams){
 		var detailService = {};
 
 		//encode the url

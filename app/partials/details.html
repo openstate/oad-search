@@ -4,35 +4,38 @@
   <div ng-include="'app/partials/error.html'"></div>
 <div ng-repeat="item in results" ng-controller="ItemCtrl" class="fullheight" >
 
-			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 fullheight" >
-			
-		        <div class="detail-image-container fullheight">
-		        <video  ng-show="showPlayer" width="100%" height="100%" controls poster="{{imgurl}}" preload='none'>
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 white"   >
+			    <video  ng-show="showPlayer" width="100%" height="{{maxHeight}}px" controls poster="{{imgurl}}" preload='none'>
 		          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
 		     
 		          Your browser does not support the video tag.
 		        </video>
-		        <a ng-hide="showPlayer" href="{{imgurlref}}" class="detail-image" style="background-image: url({{imgurlref}})"></a>
-		      </div>
-	
-		    </div>   
+		       
+		        <a ng-hide="showPlayer" href="{{imgurlref}}"   >
+					<img style="max-width:100%; max-height:{{maxHeight}}px; margin: 0 auto; display:block;" ng-src="{{imgurlref}}" alt=""  />
+				</a>
+			</div>   
+		    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 detail-side-bar graycolor">
+ 		        <h4><b>{{title}}</b></h4>
 
-		    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 detail-side-bar">
-		      
+		        <b>Author:</b>
+		        <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> </p>
 
-		        <h4>{{title}}</h4>
-		        <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> {{date}}</p>
-		        <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
+		        <b>Date:</b>
+		        <p>{{date}}</p>
+
+		        <b>Collectie:</b>
+ 		        <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
+
+		        <b>Api ID:</b>
 		        <p><small><a href="{{apiUrl}}">{{apiId}}</a></small></p>
+
+		        <b>Licence:</b>
 		        <p>{{rights}}</p>
+
+		        <b>Description:</b>
 		        <p>{{description}}</p>
-
-
 		    </div>
-  		
-    
-
-
-
+		    <div 
 </div>
 

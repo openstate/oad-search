@@ -117,6 +117,15 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
 			QueryService.moveToPage(pagenum);
 		};
 
+		$scope.showsidebar = function (){
+			if($('.row-offcanvas.active').length === 0)
+				StateService.sidebarOpen = true;
+			else
+				StateService.sidebarOpen = false;
+
+			$('.row-offcanvas').toggleClass('active');
+		};
+
 	}]);
 
 //this controller parses all the item detail data. 
@@ -205,10 +214,6 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 			$scope.imgurl = myMediaItem;
 		}
 
-		if(isDetailView){
-			//DetailService
-		}
-
 
 		if(isQueryView){
 	
@@ -222,9 +227,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 						queryData = false;
 						return;
 					}
-
 					//the link should go to the full size image, the thumbnail should have the smaller img.
-					$scope.imgurlref = myMediaItem;
 					$scope.imgurl = data.url.replace('%3Ds0', '=s450');
 				});
 			}			
@@ -233,14 +236,22 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 	}]);
 
 //this controller if for the detail view. 
-OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','DetailService',
-	function ($scope, $http, DetailService) {
+OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','DetailService', '$window',
+	function ($scope, $http, DetailService, $window) {
 		var objectPromise = DetailService.getItem();
 
 		//TODO: I shoudl not use a ng-repeat for a single item.
 		$scope.results = [];
 		objectPromise.then(function(data) {
 			$scope.results.push(data.data);
+		});
+
+		//TODO: fix this hack with proper css
+		$scope.maxHeight = window.innerHeight - 80;
+
+		var w = angular.element($window);
+		w.bind('resize', function () {
+			$scope.maxHeight = window.innerHeight - 80;
 		});
 	}]);
 
