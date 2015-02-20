@@ -374,7 +374,38 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
 		}
 		
 		return detailService;
-	}]);	
+	}]);
+
+OCDAppServ.factory('RightUrlService' , [function(){
+		var rightUrlService = {};
+
+		
+		rightUrlService.returnlinkArray = function(rightsArray){
+			var linkModel= {
+				'http://creativecommons.org/licenses/by-sa/3.0/':'Creative Commons Attribution-ShareAlike'
+			}
+
+			for(var i=0; i<rightsArray.length; i++){
+				var rightObject  = rightsArray[i];
+				if (!!linkModel[rightObject.name]) {
+					rightObject.isUrl = true;
+					rightObject.Url = rightObject.name;
+					rightObject.showName = linkModel[rightObject.name];
+				
+				} else {
+					rightObject.isUrl = false;
+				}
+			}
+		return rightsArray;		
+		}
+
+		
+		return rightUrlService;
+	}]);
+
+
+
+	
 
 //
 function toJSONandCompres(obj){

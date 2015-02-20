@@ -7,13 +7,91 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		QueryService.clearQuery();
 		QueryService.clearFilterOptions();
 
+		$('#myCarousel a').click(function(event){
+			event.preventDefault();
+		})
+
+		$scope.isActive = function(index) {
+			if(index == 0)
+				return 'active';
+		}
+
+		var Musea = {
+			"Rijksmuseum":{
+				img:'Rijksmuseum.png',
+				url:'https://www.rijksmuseum.nl/'
+			},
+			"Beeldbank Nationaal Archief":{
+				img:'beeldbank.png',
+				url:'http://www.nationaalarchief.nl/'
+			},
+			"Tropenmuseum":{
+				img:'tropen.png',
+				url:'http://tropenmuseum.nl/'
+			},
+			"Amsterdam Museum":{
+				img:'amsterdamsmuseum.png',
+				url:'http://www.amsterdammuseum.nl/'
+			},
+			"Open Beelden":{
+				img:'Open_Beelden_logo.png',
+				url:'http://www.openbeelden.nl/'
+			},
+			"Fries Museum":{
+				img:'fries.png',
+				url:'http://www.friesmuseum.nl/'
+			},
+			"Koninklijke Bibliotheek - ByvanckB":{
+				img:'kb.png',
+				url:'http://www.kb.nl/'
+			},
+			"Centraal Museum Utrecht":{
+				img:'centraalutrecht.png',
+				url:'http://centraalmuseum.nl/'
+			},
+			"TextielMuseum":{
+				img:'textiel.png',
+				url:'http://www.textielmuseum.nl/'
+			},
+			"Visserijmuseum Zoutkamp":{
+				img:'visserij.png',
+				url:'http://www.visserijmuseum.com/'
+			}
+		};
+	
+		$scope.carousel = [];
+
 		//temp solution, changed if a better option is available.
 		QueryService.simplehttpGet("de || het || een").then(function(data){
+			console.log(data);
+			var terms = data.facets.collection.terms;
+			for(var i = 0; i < terms.length; i++ ){
+				if(Musea[terms[i].term]){
+					Musea[terms[i].term].count = terms[i].count;
+				}
+			}
+
+			var i = -1;
+			var j = -1;
+			for (var key in Musea) {
+				var num = ++i;
+				if((num % 4) === 0 ){
+					$scope.carousel[++j] = [];
+				}
+				var obj = Musea[key];
+				obj.name = key;
+				$scope.carousel[j].push(obj);
+			}
 			$scope.sourcelist = data.facets.collection.terms;
+			
+			$('.carousel').carousel({
+             	interval: 2800
+         	})
+			
 		});
 
 		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam","van Gogh"];
+		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam", "landschap"];
 		
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){
@@ -256,8 +334,8 @@ OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','DetailService', '$windo
 	}]);
 
 //this controller controlls the leftbar .
-OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService',
-	function ($scope, QueryService, StateService) {
+OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService', 'RightUrlService',
+	function ($scope, QueryService, StateService, RightUrlService) {
 		//get the data from the Queryservice
 		var data = QueryService.getData();
 		if(data){
@@ -271,7 +349,8 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService',
 			$scope.author = QueryService.getFacet('author', false);
 			setResetButtonState('author');
 
-			$scope.rights = QueryService.getFacet('rights', false);
+			//the rights are links.
+			$scope.rights = RightUrlService.returnlinkArray(QueryService.getFacet('rights', false));
 			setResetButtonState('rights');
 
 			if(StateService.sidebarOpen === true)
