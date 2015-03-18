@@ -207,8 +207,8 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
 	}]);
 
 //this controller parses all the item detail data. 
-OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
-	function ($scope, $http, DetailService) {
+OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUrlService',
+	function ($scope, $http, DetailService, RightUrlService) {
 		
 		//itemcontrolelr is used for both the detailview and the queryview, so find out witch one.
 		var isDetailView = (!!$scope.item.title ? true : false);
@@ -249,7 +249,11 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService',
 			$scope.collection = itemDetails.meta.collection || "Collection unknown";
 			$scope.originalCollectionUrl = itemDetails.meta.original_object_urls.html || "";
 			
-			$scope.rights = itemDetails.meta.rights || "";
+			$scope.rights = RightUrlService.checkForUrl(itemDetails.meta.rights);
+
+
+
+
 			$scope.description = itemDetails.description;
 			
 			
@@ -323,6 +327,8 @@ OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','DetailService', '$windo
 		objectPromise.then(function(data) {
 			$scope.results.push(data.data);
 		});
+
+
 
 		//TODO: fix this hack with proper css
 		$scope.maxHeight = window.innerHeight - 80;

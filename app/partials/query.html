@@ -46,7 +46,7 @@
           <div class="thumb-body"> 
             <a href="{{detailUrl}}"><h4>{{title}}</h4></a>
             <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> {{date}}</p>
-            <p>{{rights}}</p>
+            <p> {{rights.name}} <a ng-show="{{rights.isUrl}}" href="{{rights.Url}}"><span class="glyphicon glyphicon-info-sign" ></span> </a></p>
           </div>
           <div class="thumb-footer"> 
             <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>

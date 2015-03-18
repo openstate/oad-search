@@ -379,12 +379,11 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
 OCDAppServ.factory('RightUrlService' , [function(){
 		var rightUrlService = {};
 
+		var linkModel= {
+			'http://creativecommons.org/licenses/by-sa/3.0/':'Creative Commons Attribution-ShareAlike'
+		}
 		
 		rightUrlService.returnlinkArray = function(rightsArray){
-			var linkModel= {
-				'http://creativecommons.org/licenses/by-sa/3.0/':'Creative Commons Attribution-ShareAlike'
-			}
-
 			for(var i=0; i<rightsArray.length; i++){
 				var rightObject  = rightsArray[i];
 				if (!!linkModel[rightObject.name]) {
@@ -398,6 +397,25 @@ OCDAppServ.factory('RightUrlService' , [function(){
 			}
 		return rightsArray;		
 		}
+
+		rightUrlService.checkForUrl = function(rightstring) {
+
+			var object = {};
+
+			if (!!linkModel[rightstring]) {
+				object.isUrl = true;
+				object.name = linkModel[rightstring];
+				object.Url = rightstring;
+
+			} else {
+				object.isUrl = false;
+				object.name = rightstring;
+			}
+
+			return object;
+		}
+
+
 
 		
 		return rightUrlService;

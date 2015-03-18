@@ -31,7 +31,7 @@
 		        <p><small><a href="{{apiUrl}}">{{apiId}}</a></small></p>
 
 		        <b>Licence:</b>
-		        <p>{{rights}}</p>
+		        <p><span ng-hide="{{rights.isUrl}}"> {{rights.name}} </span> <a ng-show="{{rights.isUrl}}" href="{{rights.Url}}">{{rights.name}}</a></p>
 
 		        <b>Description:</b>
 		        <p>{{description}}</p>
