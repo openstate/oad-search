@@ -8,8 +8,10 @@ class Ocd implements Iterator {
     private $current; // pointer to array n=0,1,...,n
     private $limit; //limit for results
 
+
+    //http://api.opencultuurdata.nl/
     public function __construct() {
-        $this->api_url = 'http://api.opencultuurdata.nl/';
+        $this->api_url = 'http://localhost:5000/';
         $this->api_version = 'v0';
     }
 

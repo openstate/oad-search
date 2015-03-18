@@ -45,7 +45,7 @@ $facets = array(
             'interval' => 'year'
             ),
         'author' => array('terms' => []),
-        'rights' => array('terms' => [])
+        'rights' => array('terms' => []));
 
 } else {
     $facets = array(
