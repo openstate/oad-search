@@ -46,7 +46,7 @@ $facets = array(
             ),
         'author' => array('terms' => []),
         'rights' => array('terms' => [])
-
+);
 } else {
     $facets = array(
         //the OCD script cant handle empty facet. For now use only one facet. TODO: fix.
