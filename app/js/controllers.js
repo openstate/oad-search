@@ -97,10 +97,12 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		for(var i=0; i < examplequeries.length; i++){
 			QueryService.simplehttpGet(examplequeries[i])
 			.then(function(data){
-				$scope.examplelist.push({
-					title:data.query,
-					firstresult:[data.results[0]]
-				});
+				if(data.results[0]){
+					$scope.examplelist.push({
+						title:data.query,
+						firstresult:[data.results[0]]
+					});
+				}
 			});
 		}
 

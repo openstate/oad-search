@@ -37,20 +37,20 @@ $use_facets = filter_input(INPUT_GET, 'use_facets') ? filter_input(INPUT_GET, 'u
 $use_facets = $use_facets === 'false'? FALSE : TRUE;
 
 //to not use unnessacery recources, only use facets if needed.
+//TODO: fix assiosiative array 'hack'
 if($use_facets){
-    $facets = array(
-        'collection' => array($collection),
+$facets = array(
+        'collection' => array('terms' => []),
         'date'  =>  array(
             'interval' => 'year'
             ),
-        'author' => array(),
-        'rights' => array()
+        'author' => array('terms' => []),
+        'rights' => array('terms' => [])
 
-        );
 } else {
     $facets = array(
         //the OCD script cant handle empty facet. For now use only one facet. TODO: fix.
-        'collection' => array(),
+        'collection' => array('terms' => []),
     );
 }
 
