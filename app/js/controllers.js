@@ -111,7 +111,7 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 		});
 
 		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam", "landschap"];
+		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam", "kust"];
 		
 		$scope.examplelist = [];
 		for(var i=0; i < examplequeries.length; i++){
@@ -237,17 +237,79 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 		var isQueryView = (!!$scope.item._id ? true : false);
 
 		var itemDetails;
+
+		//this controller is used in the detail and the queryview, but it needs slight tweaking for both.
 		if(isQueryView){
 			itemDetails = $scope.item._source;
 			$scope.apiId = $scope.item._id || "";
 			$scope.apiUrl = itemDetails.meta.ocd_url || "";
 			$scope.detailUrl = DetailService.getURL($scope.apiUrl);
+
+			//only show year or century in query
+			if(itemDetails.date){
+
+				var d = new Date(itemDetails.date);
+				if(itemDetails.date_granularity){
+
+					var dateString;
+					switch(itemDetails.date_granularity) {
+					    case 2:
+					    	dateString = d.getFullYear();
+					    	dateString.substring(0, str.length - 1);
+					    	dateString = parseInt(dateString) + 1;
+					    	dateString = dateString + "th Cent.";
+					        break;
+				    	default:
+					         dateString = d.getFullYear();
+					}
+					window.test = d;
+					$scope.date = dateString;
+
+				}
+				else{
+					$scope.date = d.getFullYear();
+				}
+			}
 		}
 
 		else if(isDetailView){
 			itemDetails = $scope.item;
 			$scope.apiUrl = DetailService.getApiUrl();
 			$scope.apiId = $scope.apiUrl.split('/')[5];
+
+			//show detailed time.
+			if(itemDetails.date){
+				var d = new Date(itemDetails.date);
+				if(itemDetails.date_granularity){
+
+					var dateString;
+					switch(itemDetails.date_granularity) {
+					    case 2:
+					    	dateString = d.getFullYear();
+					    	dateString.substring(0, str.length - 1);
+					    	dateString = parseInt(dateString) + 1;
+					    	dateString = dateString + "th Century";
+					        break;
+					    case 4:
+					        dateString = d.getFullYear();
+					        break;
+					    case 8:
+					    	dateString = d.toLocaleDateString();
+					    	break;
+					    case 14:
+					    	dateString = d.toLocaleString();
+					    	break;
+					    default:
+					         dateString = d.toLocaleDateString();
+					}
+					window.test = d;
+					$scope.date = dateString;
+
+				}
+				else{
+					$scope.date = d.getFullYear();
+				}
+			}
 		}
 
 		if(isQueryView || isDetailView){
@@ -280,10 +342,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 			
 			
 
-			if(itemDetails.date){
-				var d = new Date(itemDetails.date);
-				$scope.date = d.getFullYear();
-			}
+			
 
 
 			var myMediaItem;
