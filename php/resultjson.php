@@ -1,11 +1,10 @@
 <?php
 header('Content-type: application/json');
-
 //report error and notices in JSON so its available in the angular app.
+
 include_once 'errortoJSON.php';
 include_once 'ocd.php';
 include_once 'LZString.php';
-
 
 /*
  * Default values 
@@ -18,10 +17,7 @@ $page = 1;
 
 // 'van gogh executie' (only 3 results)
 // 'rijksmuseum (about 5800 results)
-define("DEF_QUERY", "rembrandt+olieverf"); // gives nice results
-
-
-
+define("DEF_QUERY", "test"); // gives nice results
 
 /*
  * The action
@@ -40,17 +36,18 @@ $use_facets = $use_facets === 'false'? FALSE : TRUE;
 //TODO: fix assiosiative array 'hack'
 if($use_facets){
 $facets = array(
-        'collection' => array('terms' => []),
+        'collection' => (object) null, 
         'date'  =>  array(
             'interval' => 'year'
             ),
-        'author' => array('terms' => []),
-        'rights' => array('terms' => []));
+        'author' => (object) null,
+        'rights' => (object) null
+        );
 
 } else {
     $facets = array(
         //the OCD script cant handle empty facet. For now use only one facet. TODO: fix.
-        'collection' => array('terms' => []),
+        'collection' => (object) null
     );
 }
 
