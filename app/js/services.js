@@ -1,5 +1,9 @@
 var OCDAppServ = angular.module('OCDAppServices', []);
 
+var baseURLprod = "http://api.opencultuurdata.nl/v0/";
+var baseURLdev = "http://localhost:5000/v0/";
+var baseURL = baseURLdev
+
 //this factory is a service to provide the controllers with new Query data.
 OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 	function($rootScope, $http, $location, $q){
@@ -162,6 +166,14 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		queryService.getBaseFacets = function(){
 			return basefacets;
 		};
+
+		//ajax call to the sources list
+		queryService.getSources = function() {
+			return $http.get(baseURL + 'sources')
+			.then(function(data) {
+				return data.data;
+			});
+		}
 
 		//the Date range slider needs to know min max and user settings
 		queryService.getDateObject = function(){
@@ -366,7 +378,7 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
 		}
 		
 		detailService.getApiUrl = function () {
-			return url = "http://api.opencultuurdata.nl/v0/" + $routeParams.collection + '/' + $routeParams.objectid;
+			return url = baseURL + $routeParams.collection + '/' + $routeParams.objectid;
 		}
 
 		detailService.getItem = function () {

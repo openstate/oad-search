@@ -5,8 +5,8 @@
 <div ng-repeat="item in results" ng-controller="ItemCtrl" class="fullheight" >
 
 			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 white"   >
-			    <video  ng-show="showPlayer" width="100%" height="{{maxHeight}}px" controls poster="{{imgurl}}" preload='none'>
-		          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
+			    <video  ng-show="showPlayer" width="100%" height="{{maxHeight}}px" controls ng-attr-poster="{{imgurl}}" preload='none'>
+		          <source ng-repeat="source in videosources" ng-attr-src="{{source.url}}" type="{{source.content_type}}">
 		     
 		          Your browser does not support the video tag.
 		        </video>

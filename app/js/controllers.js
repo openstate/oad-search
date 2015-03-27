@@ -56,18 +56,39 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 			"Visserijmuseum Zoutkamp":{
 				img:'visserij.png',
 				url:'http://www.visserijmuseum.com/'
+			},
+			"Beeldbank Erfgoed Leiden en omstreken":{
+				img:'leiden.png',
+				url:'https://erfgoedleiden.nl/'
+			},
+			"Universiteit Utrecht Kaarten":{
+				img:'UU.png',
+				url:'http://bc.library.uu.nl/'
+			},
+			"Museum Rotterdam":{
+				img:'rotterdam.png',
+				url:'http://museumrotterdam.nl/'
+			},
+			"Regionaal Archief Tilburg":{
+				img:'tilburg-regionaal-archief.png',
+				url:'http://www.regionaalarchieftilburg.nl/'
+			},
+			"Gemeentearchief Ede":{
+				img:'ede.png',
+				url:'https://www.ede.nl/gemeente/gemeentearchief/'
 			}
+
 		};
 	
 		$scope.carousel = [];
 
 		//temp solution, changed if a better option is available.
-		QueryService.simplehttpGet("de || het || een").then(function(data){
+		QueryService.getSources().then(function(data){
 			console.log(data);
-			var terms = data.facets.collection.terms;
+			var terms = data.sources;
 			for(var i = 0; i < terms.length; i++ ){
-				if(Musea[terms[i].term]){
-					Musea[terms[i].term].count = terms[i].count;
+				if(Musea[terms[i].name]){
+					Musea[terms[i].name].count = terms[i].count;
 				}
 			}
 
@@ -82,7 +103,6 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 				obj.name = key;
 				$scope.carousel[j].push(obj);
 			}
-			$scope.sourcelist = data.facets.collection.terms;
 			
 			$('.carousel').carousel({
              	interval: 2800
