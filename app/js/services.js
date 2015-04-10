@@ -2,7 +2,7 @@ var OCDAppServ = angular.module('OCDAppServices', []);
 
 var baseURLprod = "http://api.opencultuurdata.nl/v0/";
 var baseURLdev = "http://localhost:5000/v0/";
-var baseURL = baseURLprod
+var baseURL = baseURLdev
 
 //this factory is a service to provide the controllers with new Query data.
 OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
