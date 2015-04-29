@@ -2,11 +2,18 @@ var OCDAppServ = angular.module('OCDAppServices', []);
 
 var baseURLprod = "http://api.opencultuurdata.nl/v0/";
 var baseURLdev = "http://localhost:5000/v0/";
-var baseURL = baseURLdev
+var baseURL = baseURLprod
+
+OCDAppServ.factory('StateService' , function(){
+	var stateService = {};
+	stateService.sidebarOpen = false;
+	stateService.thumbSizeSmall = false;
+	return stateService;
+});
 
 //this factory is a service to provide the controllers with new Query data.
-OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
-	function($rootScope, $http, $location, $q){
+OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', 'StateService',
+	function($rootScope, $http, $location, $q, StateService){
 		//since a factory returns an object, define a object.
 		var queryService = {};
 		
@@ -20,6 +27,8 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		//the leftbar and the query use the facets of a search without options as a reference.
 		var basefacets = false;
 		
+
+
 		//check if basefacets are available, otherwise get some.
 		//return a promise
 		function checkbasefacets (newQuery, newPage, newOptions){
@@ -44,7 +53,12 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 
 		//ajax call to the php script return a promise.
 		function getHttp(newQuery, newPage, newOptions, useFacets){
-			return $http.get('php/resultjson.php', {params:{q:newQuery, page:newPage, options:newOptions, use_facets:useFacets}})
+			var params = {q:newQuery, page:newPage, options:newOptions, use_facets:useFacets};
+			
+			if(StateService.thumbSizeSmall == true){
+				params['thumbnailresults'] = 'true';
+			}
+			return $http.get('php/resultjson.php', {params:params})
 			.then(function(data) {
 
 				if(typeof(data.data) == "String" && data.data.substring(0, 5) == "<?php"){
@@ -72,7 +86,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			return getHttp(newQuery, 1, undefined, false);
 		};
 
-
 		queryService.httpGetNewOCDData = function(newQuery, newPage, newOptions){
 			
 			/**************************
@@ -96,7 +109,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 						if(excludeoptions.hasOwnProperty(prop)){
 
 							//date is the only option that is not a exlusion list.
-							if(prop == 'date' || prop == 'onlyvideo'){
+							if(prop == 'date' || prop == 'onlyvideo' ){
 								includeoptions[prop] = excludeoptions[prop];
 								continue;
 							}
@@ -110,6 +123,10 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 							}
 						}
 					}
+					if(StateService.thumbSizeSmall == true){
+						includeoptions['thumbnailresults'] = true;
+					}
+
 					var includeoptionsstring = toJSONandCompres(includeoptions);
 
 					console.log(includeoptionsstring);
@@ -218,7 +235,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 			urlstring += (optionsString !== undefined) ? "/options/" + optionsString : "";
 			
 			$location.path(urlstring);
-			
 		};
 
 		queryService.newSearchString = function(queryString){
@@ -358,13 +374,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q',
 		//return the factory.
 		return queryService;
 	}]);
-
-
-OCDAppServ.factory('StateService' , function(){
-	var stateService = {};
-	stateService.sidebarOpen = false;
-	return stateService;
-});
 
 
 OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',

@@ -11,9 +11,11 @@ include_once 'LZString.php';
  *  
  */
 $total = 0;
-$size = 12;
+$normalsize = 12;
+$thumbnailsize = 36;
 $count_pages = 0;
 $page = 1;
+
 
 // 'van gogh executie' (only 3 results)
 // 'rijksmuseum (about 5800 results)
@@ -29,8 +31,10 @@ $collection = filter_input(INPUT_GET, 'collection') ? filter_input(INPUT_GET, 'c
 $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : $page ;
 $options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : FALSE;
 
-$use_facets = filter_input(INPUT_GET, 'use_facets') ? filter_input(INPUT_GET, 'use_facets') : TRUE;
-$use_facets = $use_facets === 'false'? FALSE : TRUE;
+$use_facets = filter_input(INPUT_GET, 'use_facets') ? FALSE : TRUE;
+
+$size = filter_input(INPUT_GET, 'thumbnailresults') ? $thumbnailsize : $normalsize;
+
 
 //to not use unnessacery recources, only use facets if needed.
 //TODO: fix assiosiative array 'hack'

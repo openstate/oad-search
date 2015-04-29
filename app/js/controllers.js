@@ -142,8 +142,8 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 
 
 //this controlls the query screen
-OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
-	function ($scope, QueryService, StateService) {
+OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$route',
+	function ($scope, QueryService, StateService, $route) {
 
 		$scope.closeMenu = function(){
 			if($('.row-offcanvas.active').length > 0)
@@ -153,6 +153,7 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
 			}
 			
 		}
+
 		$scope.openMenu = function(){
 			if($('.row-offcanvas.active').length === 0){
 				StateService.sidebarOpen = true;
@@ -226,6 +227,19 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService',
 			$('.row-offcanvas').toggleClass('active');
 		};
 
+		$scope.thumbSizeSmall = StateService.thumbSizeSmall;
+		$scope.toggleThumbSize = function() {
+			if($scope.thumbSizeSmall == false){
+				StateService.thumbSizeSmall = true;
+				$scope.thumbSizeSmall = true;
+			}				
+			else {
+				$scope.thumbSizeSmall = false;
+				StateService.thumbSizeSmall = false;
+			}
+			$route.reload();
+		}
+
 	}]);
 
 //this controller parses all the item detail data. 
@@ -247,7 +261,6 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 
 			//only show year or century in query
 			if(itemDetails.date){
-
 				var d = new Date(itemDetails.date);
 				if(itemDetails.date_granularity){
 
@@ -283,6 +296,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 				if(itemDetails.date_granularity){
 
 					var dateString;
+					//Change how the date is displayed based on the granularity.
 					switch(itemDetails.date_granularity) {
 					    case 2:
 					    	dateString = d.getFullYear();
@@ -340,11 +354,6 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 
 			$scope.description = itemDetails.description;
 			
-			
-
-			
-
-
 			var myMediaItem;
 
 			$scope.showPlayer = false;
@@ -374,28 +383,17 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 				
 			}
 			$scope.imgurlref = myMediaItem;
-			$scope.imgurl = myMediaItem;
+			if(isQueryView){
+
+				if($scope.$parent.thumbSizeSmall)
+					$scope.imgurl = myMediaItem + '?size=small';
+				else
+					$scope.imgurl = myMediaItem + '?size=medium';
+
+			}else {
+				$scope.imgurl = myMediaItem
+			}
 		}
-
-
-		if(isQueryView){
-	
-			//get redirect location of the OpenCultuurData Resolver URLs
-			//We use this as a temporary solution to get smaller sized images from Rijksmuseum
-			if(itemDetails.meta.collection == "Rijksmuseum"){
-				$http.get('php/resolve_rijks_url.php', {params:{url:myMediaItem}}).success(function(data) {
-
-					if(data.error){
-						console.log(data.error);
-						queryData = false;
-						return;
-					}
-					//the link should go to the full size image, the thumbnail should have the smaller img.
-					$scope.imgurl = data.url.replace('%3Ds0', '=s450');
-				});
-			}			
-		}
-		
 	}]);
 
 //this controller if for the detail view. 

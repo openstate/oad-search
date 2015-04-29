@@ -16,9 +16,16 @@
   <button type="button" class="btn btn-primary menubtn" ng-click="showsidebar()">&lt;&lt; Menu</button>
     <!--display the firts paginator-->
     <div class="text-center">
+      <div class="thumbnailtoggle pull-right">
+        <button type="navbar-toggle" ng-click="toggleThumbSize('small')" style="padding: 6px 10px; height: 36px;">
+           <span ng-hide="thumbSizeSmall" class="glyphicon glyphicon-th"></span>
+           <span ng-show="thumbSizeSmall" class="glyphicon glyphicon-th-large"></span>
+        </button>
+      </div>
       <ul class="pagination">
-        <li ng-repeat="page in paginator" class="{{page.class}}"  ><a href="" ng-click="moveToPage()">{{page.text}}</a></li>
+        <li ng-repeat="page in paginator" class="{{page.class}}" ><a href="" ng-click="moveToPage()">{{page.text}}</a></li>
       </ul>
+
     </div>
 
     <div class="text-center">
@@ -32,7 +39,7 @@
     </div>
 
     <!--display the results -->
-    <div ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4">
+    <div ng-hide="thumbSizeSmall" ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4">
       <div class="thumbnail" >
         <div class="thumb-image-container">
         <video  ng-show="showPlayer" width="100%" height="100%" controls ng-attr-poster="{{imgurl}}" preload='none'>
@@ -50,6 +57,25 @@
           </div>
           <div class="thumb-footer"> 
             <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div ng-show="thumbSizeSmall" ng-repeat="item in results" ng-controller="ItemCtrl" class="col-xs-6 col-sm-4 col-md-2">
+      <div class="thumbnail thumbnail-small" >
+        <div class="thumb-image-container thumb-image-container-small">
+        <video  ng-show="showPlayer" width="100%" height="100%" controls ng-attr-poster="{{imgurl}}" preload='none'>
+          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
+     
+          Your browser does not support the video tag.
+        </video>
+        <a ng-hide="showPlayer" href="{{detailUrl}}" class="thumb-image thumb-image-small" style="background-image: url({{imgurl}})"></a>
+      </div>
+      <div class="caption">
+          <div class="thumb-body thumb-body-small"> 
+            <a href="{{detailUrl}}"><span class="smallthumbtext">{{title}}</span></a>
           </div>
         </div>
       </div>
