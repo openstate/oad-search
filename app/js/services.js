@@ -389,6 +389,13 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 		};
 
 		jsonService.resolveRights = function(){
+			//provent unessesary trips
+			if(rights){
+				var defer = $q.defer();
+				defer.resolve();
+				return defer.promise;
+			}
+
 			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/json/app/data/rights.json')
 				.then(function(data){
 					rights = data.data;
