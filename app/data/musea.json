@@ -1,62 +1,62 @@
 {
 	"Rijksmuseum":{
-		"img":"Rijksmuseum.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/Rijksmuseum.png",
 		"url":"https://www.rijksmuseum.nl/"
 	},
 	"Beeldbank Nationaal Archief":{
-		"img":"beeldbank.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/beeldbank.png",
 		"url":"http://www.nationaalarchief.nl/"
 	},
 	"Tropenmuseum":{
-		"img":"tropen.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/tropen.png",
 		"url":"http://tropenmuseum.nl/"
 	},
 	"Amsterdam Museum":{
-		"img":"amsterdamsmuseum.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/amsterdamsmuseum.png",
 		"url":"http://www.amsterdammuseum.nl/"
 	},
 	"Open Beelden":{
-		"img":"Open_Beelden_logo.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/Open_Beelden_logo.png",
 		"url":"http://www.openbeelden.nl/"
 	},
 	"Fries Museum":{
-		"img":"fries.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/fries.png",
 		"url":"http://www.friesmuseum.nl/"
 	},
 	"Koninklijke Bibliotheek - ByvanckB":{
-		"img":"kb.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/kb.png",
 		"url":"http://www.kb.nl/"
 	},
 	"Centraal Museum Utrecht":{
-		"img":"centraalutrecht.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/centraalutrecht.png",
 		"url":"http://centraalmuseum.nl/"
 	},
 	"TextielMuseum":{
-		"img":"textiel.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/textiel.png",
 		"url":"http://www.textielmuseum.nl/"
 	},
 	"Visserijmuseum Zoutkamp":{
-		"img":"visserij.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/visserij.png",
 		"url":"http://www.visserijmuseum.com/"
 	},
 	"Beeldbank Erfgoed Leiden en omstreken":{
-		"img":"leiden.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/leiden.png",
 		"url":"https://erfgoedleiden.nl/"
 	},
 	"Universiteit Utrecht Kaarten":{
-		"img":"UU.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/UU.png",
 		"url":"http://bc.library.uu.nl/"
 	},
 	"Museum Rotterdam":{
-		"img":"rotterdam.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/rotterdam.png",
 		"url":"http://museumrotterdam.nl/"
 	},
 	"Regionaal Archief Tilburg":{
-		"img":"tilburg-regionaal-archief.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/tilburg-regionaal-archief.png",
 		"url":"http://www.regionaalarchieftilburg.nl/"
 	},
 	"Gemeentearchief Ede":{
-		"img":"ede.png",
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/ede.png",
 		"url":"https://www.ede.nl/gemeente/gemeentearchief/"
 	}
 }

@@ -1,8 +1,8 @@
 var OCDAppCtrl = angular.module('OCDAppControllers', ['OCDAppServices']);
 
 //this controler controlls the home screen
-OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
-	function ($scope, QueryService) {
+OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q',
+	function ($scope, QueryService, JsonService, $q) {
 		
 		QueryService.clearQuery();
 		QueryService.clearFilterOptions();
@@ -16,76 +16,18 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 				return 'active';
 		}
 
-		var Musea = {
-			"Rijksmuseum":{
-				img:'Rijksmuseum.png',
-				url:'https://www.rijksmuseum.nl/'
-			},
-			"Beeldbank Nationaal Archief":{
-				img:'beeldbank.png',
-				url:'http://www.nationaalarchief.nl/'
-			},
-			"Tropenmuseum":{
-				img:'tropen.png',
-				url:'http://tropenmuseum.nl/'
-			},
-			"Amsterdam Museum":{
-				img:'amsterdamsmuseum.png',
-				url:'http://www.amsterdammuseum.nl/'
-			},
-			"Open Beelden":{
-				img:'Open_Beelden_logo.png',
-				url:'http://www.openbeelden.nl/'
-			},
-			"Fries Museum":{
-				img:'fries.png',
-				url:'http://www.friesmuseum.nl/'
-			},
-			"Koninklijke Bibliotheek - ByvanckB":{
-				img:'kb.png',
-				url:'http://www.kb.nl/'
-			},
-			"Centraal Museum Utrecht":{
-				img:'centraalutrecht.png',
-				url:'http://centraalmuseum.nl/'
-			},
-			"TextielMuseum":{
-				img:'textiel.png',
-				url:'http://www.textielmuseum.nl/'
-			},
-			"Visserijmuseum Zoutkamp":{
-				img:'visserij.png',
-				url:'http://www.visserijmuseum.com/'
-			},
-			"Beeldbank Erfgoed Leiden en omstreken":{
-				img:'leiden.png',
-				url:'https://erfgoedleiden.nl/'
-			},
-			"Universiteit Utrecht Kaarten":{
-				img:'UU.png',
-				url:'http://bc.library.uu.nl/'
-			},
-			"Museum Rotterdam":{
-				img:'rotterdam.png',
-				url:'http://museumrotterdam.nl/'
-			},
-			"Regionaal Archief Tilburg":{
-				img:'tilburg-regionaal-archief.png',
-				url:'http://www.regionaalarchieftilburg.nl/'
-			},
-			"Gemeentearchief Ede":{
-				img:'ede.png',
-				url:'https://www.ede.nl/gemeente/gemeentearchief/'
-			}
-
-		};
+		var sourcePromise = QueryService.getSources();
+		var museaPromise = JsonService.getMusea();
+		//var Musea = 
+		//};
 	
 		$scope.carousel = [];
 
 		//temp solution, changed if a better option is available.
-		QueryService.getSources().then(function(data){
+		$q.all([sourcePromise, museaPromise]).then(function(data){
 			console.log(data);
-			var terms = data.sources;
+			var terms = data[0].sources;
+			var Musea = data[1].data;
 			for(var i = 0; i < terms.length; i++ ){
 				if(Musea[terms[i].name]){
 					Musea[terms[i].name].count = terms[i].count;
@@ -246,8 +188,6 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUrlService', '$location', 
 	function ($scope, $http, DetailService, RightUrlService, $location) {
 		var path = 	$location.path().split("/");
-		console.log(path);
-		
 		//itemcontrolelr is used for both the detailview and the queryview
 		var isDetailView = ( path[1] == 'object' ? true : false);
 		var isQueryView = ( isDetailView ? false :true );
