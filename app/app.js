@@ -23,6 +23,10 @@ OCDApp.config(['$routeProvider',
       templateUrl: 'app/partials/details.html',
       controller: 'detailCtrl'
     }).
+    when('/sourceselect',{
+      templateUrl: 'app/partials/sourceselect.html',
+      controller: 'sourceCtrl'
+    }).
     when('/query/:q', {
       redirectTo: '/query/:q/page/1'
     }).

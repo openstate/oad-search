@@ -105,8 +105,8 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', '$location',
 			}
 			
 			$('.carousel').carousel({
-             	interval: 2800
-         	})
+				interval: 2800
+			})
 			
 		});
 
@@ -243,14 +243,14 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 	}]);
 
 //this controller parses all the item detail data. 
-OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUrlService',
-	function ($scope, $http, DetailService, RightUrlService) {
+OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUrlService', '$location', 
+	function ($scope, $http, DetailService, RightUrlService, $location) {
+		var path = 	$location.path().split("/");
+		console.log(path);
 		
-		//itemcontrolelr is used for both the detailview and the queryview, so find out witch one.
-		var isDetailView = (!!$scope.item.title ? true : false);
-		var isQueryView = (!!$scope.item._id ? true : false);
-
-		var itemDetails;
+		//itemcontrolelr is used for both the detailview and the queryview
+		var isDetailView = ( path[1] == 'object' ? true : false);
+		var isQueryView = ( isDetailView ? false :true );
 
 		//this controller is used in the detail and the queryview, but it needs slight tweaking for both.
 		if(isQueryView){
@@ -266,14 +266,14 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 
 					var dateString;
 					switch(itemDetails.date_granularity) {
-					    case 2:
-					    	dateString = d.getFullYear();
-					    	dateString.substring(0, str.length - 1);
-					    	dateString = parseInt(dateString) + 1;
-					    	dateString = dateString + "th Cent.";
-					        break;
-				    	default:
-					         dateString = d.getFullYear();
+						case 2:
+							dateString = d.getFullYear();
+							dateString.substring(0, str.length - 1);
+							dateString = parseInt(dateString) + 1;
+							dateString = dateString + "th Cent.";
+							break;
+						default:
+							 dateString = d.getFullYear();
 					}
 					window.test = d;
 					$scope.date = dateString;
@@ -298,23 +298,23 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 					var dateString;
 					//Change how the date is displayed based on the granularity.
 					switch(itemDetails.date_granularity) {
-					    case 2:
-					    	dateString = d.getFullYear();
-					    	dateString.substring(0, str.length - 1);
-					    	dateString = parseInt(dateString) + 1;
-					    	dateString = dateString + "th Century";
-					        break;
-					    case 4:
-					        dateString = d.getFullYear();
-					        break;
-					    case 8:
-					    	dateString = d.toLocaleDateString();
-					    	break;
-					    case 14:
-					    	dateString = d.toLocaleString();
-					    	break;
-					    default:
-					         dateString = d.toLocaleDateString();
+						case 2:
+							dateString = d.getFullYear();
+							dateString.substring(0, str.length - 1);
+							dateString = parseInt(dateString) + 1;
+							dateString = dateString + "th Century";
+							break;
+						case 4:
+							dateString = d.getFullYear();
+							break;
+						case 8:
+							dateString = d.toLocaleDateString();
+							break;
+						case 14:
+							dateString = d.toLocaleString();
+							break;
+						default:
+							 dateString = d.toLocaleDateString();
 					}
 					window.test = d;
 					$scope.date = dateString;
@@ -326,74 +326,73 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 			}
 		}
 
-		if(isQueryView || isDetailView){
-			$scope.title = itemDetails.title || "Title unknown";
-					
-			//show the first author
-			$scope.author = itemDetails.authors && itemDetails.authors[0] || "Author unknown";
+		$scope.title = itemDetails.title || "Title unknown";
+				
+		//show the first author
+		$scope.author = itemDetails.authors && itemDetails.authors[0] || "Author unknown";
+		
+		//if more authors, show the three dots and add title text.
+		if(itemDetails.authors && itemDetails.authors.length > 1) {
+			$scope.authorhooverindicate = "...";
 			
-			//if more authors, show the three dots and add title text.
-			if(itemDetails.authors && itemDetails.authors.length > 1) {
-				$scope.authorhooverindicate = "...";
-				
-				var hoovertext = "";
-				for(var i = 0; i < itemDetails.authors.length; i++) {
-					hoovertext += itemDetails.authors[i] + ' / ';
-				}
-				
-				$scope.authorhoover = hoovertext.slice(0,-3);
+			var hoovertext = "";
+			for(var i = 0; i < itemDetails.authors.length; i++) {
+				hoovertext += itemDetails.authors[i] + ' / ';
 			}
-
-			$scope.collection = itemDetails.meta.collection || "Collection unknown";
-			$scope.originalCollectionUrl = itemDetails.meta.original_object_urls.html || "";
 			
-			$scope.rights = RightUrlService.checkForUrl(itemDetails.meta.rights);
-
-
-
-
-			$scope.description = itemDetails.description;
-			
-			var myMediaItem;
-
-			$scope.showPlayer = false;
-			$scope.videosources = [];
-			
-			//resolve the image.
-			for (var i = 0; i < itemDetails.media_urls.length; i++) {
-				mediaItem = itemDetails.media_urls[i];
-				
-				// Skip the non-image media content type (for example Openbeelden videos)
-				if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1){
-					if(['video/mp4', 'video/ogg', 'video/webm'].indexOf(mediaItem.content_type) > -1){
-						$scope.showPlayer = true;
-						$scope.videosources.push(mediaItem);
-					}
-					continue;
-				}				
-
-				// Pick the 500px image (Beeldbank Nationaal Archief)
-				if(mediaItem && mediaItem.width == 500){
-					myMediaItem = mediaItem.url;
-					break;
-				}
-
-				// or pick the last image left (for example Rijksmuseum, Openbeelden)
-				myMediaItem = mediaItem.url;
-				
-			}
-			$scope.imgurlref = myMediaItem;
-			if(isQueryView){
-
-				if($scope.$parent.thumbSizeSmall)
-					$scope.imgurl = myMediaItem + '?size=small';
-				else
-					$scope.imgurl = myMediaItem + '?size=medium';
-
-			}else {
-				$scope.imgurl = myMediaItem
-			}
+			$scope.authorhoover = hoovertext.slice(0,-3);
 		}
+
+		$scope.collection = itemDetails.meta.collection || "Collection unknown";
+		$scope.originalCollectionUrl = itemDetails.meta.original_object_urls.html || "";
+		
+		$scope.rights = RightUrlService.checkForUrl(itemDetails.meta.rights);
+
+
+
+
+		$scope.description = itemDetails.description;
+		
+		var myMediaItem;
+
+		$scope.showPlayer = false;
+		$scope.videosources = [];
+		
+		//resolve the image.
+		for (var i = 0; i < itemDetails.media_urls.length; i++) {
+			mediaItem = itemDetails.media_urls[i];
+			
+			// Skip the non-image media content type (for example Openbeelden videos)
+			if(['image/jpeg','image/jpg','image/gif','image/png'].indexOf(mediaItem.content_type) == -1){
+				if(['video/mp4', 'video/ogg', 'video/webm'].indexOf(mediaItem.content_type) > -1){
+					$scope.showPlayer = true;
+					$scope.videosources.push(mediaItem);
+				}
+				continue;
+			}				
+
+			// Pick the 500px image (Beeldbank Nationaal Archief)
+			if(mediaItem && mediaItem.width == 500){
+				myMediaItem = mediaItem.url;
+				break;
+			}
+
+			// or pick the last image left (for example Rijksmuseum, Openbeelden)
+			myMediaItem = mediaItem.url;
+			
+		}
+		$scope.imgurlref = myMediaItem;
+		if(isQueryView){
+
+			if($scope.$parent.thumbSizeSmall)
+				$scope.imgurl = myMediaItem + '?size=small';
+			else
+				$scope.imgurl = myMediaItem + '?size=medium';
+
+		}else {
+			$scope.imgurl = myMediaItem
+		}
+	
 	}]);
 
 //this controller if for the detail view. 
@@ -405,9 +404,8 @@ OCDAppCtrl.controller('detailCtrl' , ['$scope', '$http','DetailService', '$windo
 		$scope.results = [];
 		objectPromise.then(function(data) {
 			$scope.results.push(data.data);
+			console.log(data.data);
 		});
-
-
 
 		//TODO: fix this hack with proper css
 		$scope.maxHeight = window.innerHeight - 80;
@@ -577,17 +575,29 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location', 'Sta
 	}
 	]);
 
+OCDAppCtrl.controller('sourceCtrl', ['$scope', 'QueryService', 'StateService',
+	function($scope, QueryService, StateService) {
+		
+
+		QueryService.getSources().then(function(data){
+			$scope.sources = data.sources;
+			console.log(data);
+		});
+
+	}
+]);
 
 OCDAppCtrl.controller('ErrorCtrl', ['$scope', function($scope) {
 
-	$scope.currentError = null;
+	$scope.currentError = "";
 
 	$scope.clearError = function () {
-		$scope.currentError = null;
+		$scope.currentError = "";
 	};
 
 	$scope.$on('error', function(e, errorMessage) {
-		$scope.currentError = errorMessage;
+		$scope.currentError += errorMessage+ '\n' ;
+
 	});
 
 }]);

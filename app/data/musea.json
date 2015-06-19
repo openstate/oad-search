@@ -1,0 +1,62 @@
+{
+	"Rijksmuseum":{
+		"img":"Rijksmuseum.png",
+		"url":"https://www.rijksmuseum.nl/"
+	},
+	"Beeldbank Nationaal Archief":{
+		"img":"beeldbank.png",
+		"url":"http://www.nationaalarchief.nl/"
+	},
+	"Tropenmuseum":{
+		"img":"tropen.png",
+		"url":"http://tropenmuseum.nl/"
+	},
+	"Amsterdam Museum":{
+		"img":"amsterdamsmuseum.png",
+		"url":"http://www.amsterdammuseum.nl/"
+	},
+	"Open Beelden":{
+		"img":"Open_Beelden_logo.png",
+		"url":"http://www.openbeelden.nl/"
+	},
+	"Fries Museum":{
+		"img":"fries.png",
+		"url":"http://www.friesmuseum.nl/"
+	},
+	"Koninklijke Bibliotheek - ByvanckB":{
+		"img":"kb.png",
+		"url":"http://www.kb.nl/"
+	},
+	"Centraal Museum Utrecht":{
+		"img":"centraalutrecht.png",
+		"url":"http://centraalmuseum.nl/"
+	},
+	"TextielMuseum":{
+		"img":"textiel.png",
+		"url":"http://www.textielmuseum.nl/"
+	},
+	"Visserijmuseum Zoutkamp":{
+		"img":"visserij.png",
+		"url":"http://www.visserijmuseum.com/"
+	},
+	"Beeldbank Erfgoed Leiden en omstreken":{
+		"img":"leiden.png",
+		"url":"https://erfgoedleiden.nl/"
+	},
+	"Universiteit Utrecht Kaarten":{
+		"img":"UU.png",
+		"url":"http://bc.library.uu.nl/"
+	},
+	"Museum Rotterdam":{
+		"img":"rotterdam.png",
+		"url":"http://museumrotterdam.nl/"
+	},
+	"Regionaal Archief Tilburg":{
+		"img":"tilburg-regionaal-archief.png",
+		"url":"http://www.regionaalarchieftilburg.nl/"
+	},
+	"Gemeentearchief Ede":{
+		"img":"ede.png",
+		"url":"https://www.ede.nl/gemeente/gemeentearchief/"
+	}
+}

@@ -1,0 +1,18 @@
+  <!--include the navbar-->
+  <div ng-include="'app/partials/nav.html'"></div>
+  
+  <!--include the bootstrap modal for alerts  -->
+  <div ng-include="'app/partials/error.html'"></div>
+
+  <div class="container-fluid">
+
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 ">
+    <table>
+    <tr ng-repeat="source in sources">
+     <td>
+        <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="source.active" ng-change="updateExcludeList('collection')"></td><td>
+        <label for="{{facet.name}}">{{source.name}} <label></td><td align="right"><small>({{source.count}})</small></td>
+     </tr>
+   </table>
+  </div>
+</div>

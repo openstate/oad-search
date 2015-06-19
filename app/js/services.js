@@ -2,12 +2,13 @@ var OCDAppServ = angular.module('OCDAppServices', []);
 
 var baseURLprod = "http://api.opencultuurdata.nl/v0/";
 var baseURLdev = "http://localhost:5000/v0/";
-var baseURL = baseURLprod
+var baseURL = baseURLprod;
 
 OCDAppServ.factory('StateService' , function(){
 	var stateService = {};
 	stateService.sidebarOpen = false;
 	stateService.thumbSizeSmall = false;
+	stateService.sourceSelect = ['rijksmuseum','fries_museum', 'textielmuseum'];
 	return stateService;
 });
 
@@ -67,7 +68,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 					};
 				}
 				
-				if(data.error){
+				if(data.data.error){
 					console.log("phperror");
 					console.log(data.error);
 					queryData = false;
@@ -123,7 +124,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 							}
 						}
 					}
-					if(StateService.thumbSizeSmall == true){
+					if(StateService.thumbSizeSmall === true){
 						includeoptions['thumbnailresults'] = true;
 					}
 
@@ -252,6 +253,9 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 		queryService.getFacet = function(facetname, fixedfacet){
 			//build a list off all the terms;
 			var results = [];
+			if(!basefacets)
+				return;
+
 			var basefacet = basefacets[facetname];
 			var queryfacet = queryData.facets[facetname];
 
