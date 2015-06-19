@@ -385,7 +385,7 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 		var rights;
 
 		jsonService.getMusea = function(){
-			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/json/app/data/musea.json');
+			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/musea.json');
 		};
 
 		jsonService.resolveRights = function(){
@@ -396,7 +396,7 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 				return defer.promise;
 			}
 
-			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/json/app/data/rights.json')
+			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/rights.json')
 				.then(function(data){
 					rights = data.data;
 				});
