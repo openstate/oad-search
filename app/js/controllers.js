@@ -575,17 +575,6 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location', 'Sta
 	}
 	]);
 
-OCDAppCtrl.controller('sourceCtrl', ['$scope', 'QueryService', 'StateService',
-	function($scope, QueryService, StateService) {
-		
-
-		QueryService.getSources().then(function(data){
-			$scope.sources = data.sources;
-			console.log(data);
-		});
-
-	}
-]);
 
 OCDAppCtrl.controller('ErrorCtrl', ['$scope', function($scope) {
 
