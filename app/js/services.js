@@ -382,9 +382,21 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 OCDAppServ.factory('JsonService' , ['$http', '$q',
 	function($http, $q){
 		var jsonService = {};
+		var rights;
 
 		jsonService.getMusea = function(){
 			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/json/app/data/musea.json');
+		};
+
+		jsonService.resolveRights = function(){
+			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/json/app/data/rights.json')
+				.then(function(data){
+					rights = data.data;
+				});
+		};
+
+		jsonService.getRights = function(){
+			return rights;
 		};
 
 
@@ -414,12 +426,10 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
 		return detailService;
 	}]);
 
-OCDAppServ.factory('RightUrlService' , [function(){
+OCDAppServ.factory('RightUrlService', ['JsonService', function(JsonService){
 		var rightUrlService = {};
 
-		var linkModel= {
-			'http://creativecommons.org/licenses/by-sa/3.0/':'Creative Commons Attribution-ShareAlike'
-		}
+		var linkModel = JsonService.getRights();
 		
 		rightUrlService.returnlinkArray = function(rightsArray){
 			for(var i=0; i<rightsArray.length; i++){
@@ -433,7 +443,7 @@ OCDAppServ.factory('RightUrlService' , [function(){
 					rightObject.isUrl = false;
 				}
 			}
-		return rightsArray;		
+			return rightsArray;		
 		}
 
 		rightUrlService.checkForUrl = function(rightstring) {

@@ -17,15 +17,14 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 		}
 
 		var sourcePromise = QueryService.getSources();
+		
+		//to be able to update the museau witout redeploy, het the json from git.
 		var museaPromise = JsonService.getMusea();
-		//var Musea = 
-		//};
 	
 		$scope.carousel = [];
 
 		//temp solution, changed if a better option is available.
 		$q.all([sourcePromise, museaPromise]).then(function(data){
-			console.log(data);
 			var terms = data[0].sources;
 			var Musea = data[1].data;
 			for(var i = 0; i < terms.length; i++ ){
