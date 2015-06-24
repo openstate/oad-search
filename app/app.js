@@ -64,7 +64,7 @@ OCDApp.config(['$routeProvider',
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
             JsonService.resolveRights().then(function(data1){
-              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options).then(function(data2){
                 defer.resolve(data2);
               });
             });  
