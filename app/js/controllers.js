@@ -21,11 +21,14 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 		
 		//to be able to update the museau witout redeploy, get the json from git.
 		var museaPromise = JsonService.getMusea();
+
+	
 	
 		//if all are resolved
 		$q.all([sourcePromise, museaPromise]).then(function(data){
 			var terms = data[0].sources;
 			var Musea = data[1].data;
+
 			//add the source counts to the musea
 			for(var i = 0; i < terms.length; i++ ){
 				if(Musea[terms[i].name]){
@@ -80,24 +83,31 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 			$('.carousel').carousel({
 				interval: 2800
 			})
-			
+
 		});
 
-		//get the first restult of six example query's. 
-		var examplequeries = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam", "kust"];
+		//get the first restult of six example query's.
+		//to be able to update the 6 default examples witout redeploy, get the json from git.
+		JsonService.getHomeQuery().then(function(data){
+			var examplequeries = data.data;
+			$scope.examplelist = [];
+			for(var i=0; i < examplequeries.length; i++){
+				QueryService.simplehttpGet(examplequeries[i])
+				.then(function(data){
+					if(data.results[0]){
+						$scope.examplelist.push({
+							title:data.query,
+							firstresult:[data.results[0]]
+						});
+					}
+				});
+			}
+		});
+
 		
-		$scope.examplelist = [];
-		for(var i=0; i < examplequeries.length; i++){
-			QueryService.simplehttpGet(examplequeries[i])
-			.then(function(data){
-				if(data.results[0]){
-					$scope.examplelist.push({
-						title:data.query,
-						firstresult:[data.results[0]]
-					});
-				}
-			});
-		}
+		// = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam", "kust"];
+		
+		
 
 		$scope.goToQuery = function(){
 			QueryService.newSearchString(this.item.title);

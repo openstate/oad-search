@@ -388,6 +388,10 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/musea.json');
 		};
 
+		jsonService.getHomeQuery = function(){
+			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/homequerys.json');
+		};
+
 		jsonService.resolveRights = function(){
 			//provent unessesary trips
 			if(rights){
