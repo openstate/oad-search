@@ -1,0 +1,115 @@
+[
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/Rijksmuseum.png",
+		"url":"https://www.rijksmuseum.nl/",
+		"sources": [
+			"Rijksmuseum"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/beeldbank.png",
+		"url":"http://www.nationaalarchief.nl/",
+		"sources": [
+			"Beeldbank Nationaal Archief"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/tropen.png",
+		"url":"http://tropenmuseum.nl/",
+		"sources": [
+			"Tropenmuseum"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/amsterdamsmuseum.png",
+		"url":"http://www.amsterdammuseum.nl/",
+		"sources": [
+			"Amsterdam Museum"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/Open_Beelden_logo.png",
+		"url":"http://www.openbeelden.nl/",
+		"sources": [
+			"Open Beelden"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/fries.png",
+		"url":"http://www.friesmuseum.nl/",
+		"sources": [
+			"Fries Museum"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/kb.png",
+		"url":"http://www.kb.nl/",
+		"sources": [
+			"Koninklijke Bibliotheek - ByvanckB"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/centraalutrecht.png",
+		"url":"http://centraalmuseum.nl/",
+		"sources": [
+			"Centraal Museum Utrecht"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/textiel.png",
+		"url":"http://www.textielmuseum.nl/",
+		"sources": [
+			"TextielMuseum"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/visserij.png",
+		"url":"http://www.visserijmuseum.com/",
+		"sources": [
+			"Visserijmuseum Zoutkamp"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/leiden.png",
+		"url":"https://erfgoedleiden.nl/",
+		"sources": [
+			"Beeldbank Erfgoed Leiden en omstreken"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/UU.png",
+		"url":"http://bc.library.uu.nl/",
+		"sources": [
+			"Universiteit Utrecht Kaarten"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/rotterdam.png",
+		"url":"http://museumrotterdam.nl/",
+		"sources": [
+			"Museum Rotterdam"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/tilburg-regionaal-archief.png",
+		"url":"http://www.regionaalarchieftilburg.nl/",
+		"sources": [
+			"Regionaal Archief Tilburg"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/ede.png",
+		"url":"https://www.ede.nl/gemeente/gemeentearchief/",
+		"sources": [
+			"Gemeentearchief Ede"
+		]
+	},
+	{
+		"img":"https://raw.githubusercontent.com/openstate/ocd-search/json/app/img/sourcelogo/regarchiefalkmaar.png",
+		"url":"https://www.regionaalarchiefalkmaar.nl/",
+		"sources": [
+			"Regionaal Archief Alkmaar Bonda",
+			"Regionaal Archief Alkmaar Bosboom"
+		]
+	}
+]
