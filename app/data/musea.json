@@ -135,15 +135,5 @@
       "Marker Museum"
     ],
     "uri": "marker-museum"
-  },
-  {
-    "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/nijmegen.png",
-    "url": "http://www2.nijmegen.nl/wonen/oudste_stad/Archief",
-    "sources": [
-      "Regionaal Archief Nijmegen - Fotocollectie Prof. dr. E.F. van der Grinten",
-      "Archief Kon. Ned. Bond voor Lichamelijke Opvoeding (KNBLO) 1906-2003 - Deelnemers / Vierdaagse / Wandelsport ",
-      "Regionaal Archief Nijmegen - Affichecollectie Doornroosje"
-    ],
-    "uri": "regionaal-archief-nijmegen"
   }
 ]
