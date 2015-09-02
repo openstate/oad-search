@@ -478,10 +478,8 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location', 'Sta
 		var data = QueryService.getData();
 		$scope.query = data.query;
 
-		if($location.$$path.substring(0,6) == "/query")
-			$scope.onquerypage = true;
-		else
-			$scope.onquerypage = false;
+		
+		$scope.onquerypage = (($location.$$path.split('/').indexOf("query") != -1)) ? true : false;
 
 		//call the service and notify them of a new search query
 		$scope.search = function(){
