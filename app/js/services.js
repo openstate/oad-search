@@ -13,8 +13,8 @@ OCDAppServ.factory('StateService' , function(){
 });
 
 //this factory is a service to provide the controllers with new Query data.
-OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', 'StateService',
-	function($rootScope, $http, $location, $q, StateService){
+OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', 'StateService', 'MuseumCombineServ',  
+	function($rootScope, $http, $location, $q, StateService, MuseumCombineServ){
 		//since a factory returns an object, define a object.
 		var queryService = {};
 		
@@ -24,30 +24,47 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 		var page;
 		var options;
 		var optionsString;
+		var institutionName;
 
 		//the leftbar and the query use the facets of a search without options as a reference.
 		var basefacets = false;
 		
-
-
+		
 		//check if basefacets are available, otherwise get some.
 		//return a promise
-		function checkbasefacets (newQuery, newPage, newOptions){
+		function checkbasefacets (newQuery, newPage, newOptions, institution){
 			var deferred = $q.defer();
+			institutionName = institution;
 
-			if(basefacets || !newOptions){
+			if(basefacets || (!newOptions && !institution)){
 				//if basefacets are set or there are no options no need
 				//for extra ajax call 
 				deferred.resolve();
 			} else {
+				//if there is a instution, edit the base facet list to only include those options.
+				var options;
 
-				getHttp(newQuery, newPage).then(function(data) {
-					basefacets = data.facets;
-					deferred.resolve();
-				},
-				function(reason) {
-					console.log('Failed: ' + reason);
-				});
+				if(institution){
+					musea = MuseumCombineServ.getMusea();
+					for (var i = musea.length - 1; i >= 0; i--) {
+						if(musea[i].uri == institution){
+							options = base64url_encode({
+								'collection': musea[i].sources
+							});	
+						}
+					};
+				}
+
+				getHttp(newQuery, newPage, options).then(
+					function(data) {
+						basefacets = data.facets;
+						
+						deferred.resolve();
+					},
+					function(reason) {
+						console.log('Failed: ' + reason);
+					}
+				);
 			}
 			return deferred.promise;
 		}
@@ -87,7 +104,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			return getHttp(newQuery, 1, undefined, false);
 		};
 
-		queryService.httpGetNewOCDData = function(newQuery, newPage, newOptions){
+		queryService.httpGetNewOCDData = function(newQuery, newPage, newOptions, institution){
 			
 			/**************************
 			first detenmine if basefacets need to be get.
@@ -97,14 +114,26 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			completepromise  will be returned to the router, 
 			the router will wait until the completepromise is resolved.
 			****************************/
-			var completepromise = checkbasefacets(newQuery, newPage, newOptions)
+			var completepromise = checkbasefacets(newQuery, newPage, newOptions, institution)
 			//then get the actual query.
 			.then( function() {
-				if(!!newOptions) {
+				if(!!newOptions || institution) {
 					//becouse the api does not feature exclude filters
-					//use the basefacets to construct a inclusion list.					
-					var excludeoptions = base64url_decode(newOptions);
+					//use the basefacets to construct a inclusion list.	
+					var excludeoptions = {};
 					var includeoptions = {};
+
+					if(newOptions) {
+						excludeoptions = base64url_decode(newOptions);
+					} 
+
+					if(!excludeoptions['collection']) {
+						includeoptions['collection'] = [];
+						var baseterms = basefacets['collection'].terms;
+						for(var i = 0;i < baseterms.length; i++){
+							includeoptions['collection'].push(baseterms[i].term);
+						}
+					}
 
 					for (var prop in excludeoptions){
 						if(excludeoptions.hasOwnProperty(prop)){
@@ -113,7 +142,11 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 							if(prop == 'date' || prop == 'onlyvideo' ){
 								includeoptions[prop] = excludeoptions[prop];
 								continue;
+
+
 							}
+
+
 
 							includeoptions[prop] = [];
 							var baseterms = basefacets[prop].terms;
@@ -185,14 +218,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			return basefacets;
 		};
 
-		//ajax call to the sources list
-		queryService.getSources = function() {
-			return $http.get(baseURL + 'sources')
-			.then(function(data) {
-				return data.data;
-			});
-		}
-
 		//the Date range slider needs to know min max and user settings
 		queryService.getDateObject = function(){
 			//if there are filter options, return the filter options.
@@ -234,6 +259,11 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			
 			//only add the options if they are defined
 			urlstring += (optionsString !== undefined) ? "/options/" + optionsString : "";
+
+			//if a institution is defined. prepend
+			if(institutionName){
+				urlstring = "institution/" + institutionName + "/" + urlstring;
+			}
 			
 			$location.path(urlstring);
 		};
@@ -243,8 +273,14 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 
 			//reset the basefacets.
 			basefacets = false;
+
 			//only add the options if they are defined
 			urlstring += (optionsString !== undefined) ? "/options/" + optionsString : "";
+
+			//if a institution is defined. prepend
+			if(institutionName){
+				urlstring = "institution/" + institutionName + "/" + urlstring;
+			}
 
 			$location.path(urlstring);
 		};
@@ -361,6 +397,11 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 				optionsString = undefined;
 			}
 
+			//if a institution is defined. prepend
+			if(institutionName){
+				urlstring = "institution/" + institutionName + "/" + urlstring;
+			}
+
 			$location.path(urlstring);
 			
 			//the daterange slider does not start a digest, so start manualy.
@@ -375,9 +416,31 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			basefacets = false;
 		}
 
+		queryService.clearInstitution = function(){
+			institutionName = undefined;
+		}
+
 		//return the factory.
 		return queryService;
-	}]);
+	}
+]);
+
+OCDAppServ.factory('SourcesService' , ['$http',
+	function($http){
+		
+		SourcesService = {};
+		//ajax call to the sources list
+		SourcesService.getSources = function() {
+			return $http.get(baseURL + 'sources')
+			.then(function(data) {
+				return data.data;
+			});
+		};
+
+		return SourcesService;
+	}
+]);
+
 
 OCDAppServ.factory('JsonService' , ['$http', '$q',
 	function($http, $q){
@@ -415,6 +478,113 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 
 	}]);
 
+//get a list of musea and source information.
+OCDAppServ.factory('MuseumCombineServ' , ['$q', 'JsonService' , 'SourcesService',
+	function($q, JsonService, QueryService){
+		var MuseumCombineServ = {};
+		var MuseaData;
+		var museaCombinePromise = $q.defer();
+
+		//get sources from the API
+		var sourcePromise = SourcesService.getSources();
+		//to be able to update the museau witout redeploy, get the json from git.
+		var museaPromise = JsonService.getMusea();
+			
+		function resolveMusea(){
+			//if all are resolved
+			$q.all([sourcePromise, museaPromise]).then(function(data){
+				var terms = data[0].sources;
+				var Musea = data[1].data;
+
+				//add the source counts to the musea
+				for(var j = 0; j < Musea.length; j++ ){
+					Musea[j].count = 0;
+					for(var k = 0; k < Musea[j].sources.length; k++ ){
+						for(var i = 0; i < terms.length; i++ ){
+							if(Musea[j].sources[k] == terms[i].name){
+								Musea[j].count += terms[i].count;
+								break;
+							}
+						}
+					}
+				}				
+
+				//put the object keys in a array to be able to shuffle
+				var shufflearray = [];
+				for (var key in Musea) {
+					shufflearray.push(key);
+				}
+
+				//standard Fisher-Yates (aka Knuth) Shuffle.
+				function shuffle(array) {
+					var currentIndex = array.length, temporaryValue, randomIndex ;
+
+					// While there remain elements to shuffle...
+					while (0 !== currentIndex) {
+
+					// Pick a remaining element...
+					randomIndex = Math.floor(Math.random() * currentIndex);
+					currentIndex -= 1;
+
+						// And swap it with the current element.
+						temporaryValue = array[currentIndex];
+						array[currentIndex] = array[randomIndex];
+						array[randomIndex] = temporaryValue;
+					}
+					return array;
+				}
+				//shuffle it
+				shufflearray = shuffle(shufflearray);
+
+				MuseaData = [];
+				for (var i = 0; i < shufflearray.length; i++ ) {
+					MuseaData.push(Musea[shufflearray[i]])
+				};
+
+				museaCombinePromise.resolve(MuseaData);
+			});
+		}
+
+		MuseumCombineServ.resolveMusea = function(){
+			//provent unessesary trips
+			if(MuseaData){
+				var defer = $q.defer();
+				defer.resolve(MuseaData);
+				return defer.promise;
+			} else {
+				resolveMusea();
+				return museaCombinePromise.promise;
+			}
+		};
+
+		MuseumCombineServ.getMusea= function(){
+			return MuseaData;
+		};
+
+		return MuseumCombineServ;
+	}]);
+
+
+//some data is always needed, so all routes should go to the startup services
+OCDAppServ.factory('StartUpService' , ['$q', 'JsonService' , 'MuseumCombineServ',
+	function($q, JsonService, MuseumCombineServ){
+		StartUpService = {};
+
+		StartUpService.init = function(){
+			var defer = $q.defer();
+			var rights = JsonService.resolveRights();
+			var Musea = MuseumCombineServ.resolveMusea();
+
+			$q.all([rights, Musea]).then(function(data){
+				defer.resolve();
+			});
+
+			return defer.promise;
+		};
+
+		return StartUpService;
+
+	}]);
 
 OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
 	function($rootScope, $http, $routeParams){
@@ -437,6 +607,8 @@ OCDAppServ.factory('DetailService' , ['$rootScope', '$http', '$routeParams',
 		return detailService;
 	}]);
 
+
+//service for managing the rights.
 OCDAppServ.factory('RightUrlService', ['JsonService', function(JsonService){
 		var rightUrlService = {};
 

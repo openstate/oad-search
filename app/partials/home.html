@@ -15,7 +15,7 @@
 
               <div class="item {{isActive($index)}}" ng-repeat="sourcerow in carousel">
                   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                      <div class="col-xs-3" ng-repeat="source in sourcerow"><a href="{{source.url}}"><img ng-src="{{source.img}}" alt="Image" class="img-responsive"></a>
+                      <div class="col-xs-3" ng-repeat="source in sourcerow"><a href="#/institution/{{source.uri}}"><img ng-src="{{source.img}}" alt="Image" class="img-responsive"></a>
                       <div class="text-center"><span class="badge badge-carousel">{{source.count}}</span></div>
                       </div>
                   </div>

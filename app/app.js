@@ -15,8 +15,8 @@ OCDApp.config(['$routeProvider',
       templateUrl: 'app/partials/home.html',
       controller: 'homeCtrl',
       resolve:{
-        getData: [ 'JsonService', function(JsonService) {
-            return JsonService.resolveRights();
+        getData: [ 'StartUpService', function(StartUpService) {
+            return StartUpService.init();
         }]
       }
     }).
@@ -28,8 +28,8 @@ OCDApp.config(['$routeProvider',
       templateUrl: 'app/partials/details.html',
       controller: 'detailCtrl',
       resolve:{
-        getData: [ 'JsonService', function(JsonService) {
-            return JsonService.resolveRights();
+        getData: [ 'StartUpService', function(StartUpService) {
+            return StartUpService.init();
         }]
       }
     }).
@@ -42,10 +42,10 @@ OCDApp.config(['$routeProvider',
         //if you define a resolve, the routeProvider will wait till till all promises defined here
         //are resolved before updating the route and the data. This makes the transions smoother.
         resolve:{
-          getData:['$route' , 'QueryService', 'JsonService', '$q',  function($route, QueryService, JsonService, $q) {
+          getData:['$route' , 'QueryService', 'StartUpService', '$q',  function($route, QueryService, StartUpService, $q) {
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
-            JsonService.resolveRights().then(function(data1){
+            StartUpService.init().then(function(data1){
               QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page).then(function(data2){
                 defer.resolve(data2);
               });
@@ -60,10 +60,10 @@ OCDApp.config(['$routeProvider',
         //if you define a resolve, the routeProvider will wait till till all promises defined here
         //are resolved before updating the route and the data. This makes the transions smoother.
         resolve:{
-          getData:['$route' , 'QueryService', 'JsonService', '$q',  function($route, QueryService, JsonService, $q) {
+          getData:['$route' , 'QueryService', 'StartUpService', '$q',  function($route, QueryService, StartUpService, $q) {
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
-            JsonService.resolveRights().then(function(data1){
+            StartUpService.init().then(function(data1){
               QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options).then(function(data2){
                 defer.resolve(data2);
               });
@@ -72,12 +72,56 @@ OCDApp.config(['$routeProvider',
           }]
         }
       }).
-    otherwise({
-      
-      
+    when('/institution/:institutionUri/', {
+      redirectTo: '/institution/:institutionUri/query/de/page/1'
+    }).
+    when('/institution/:institutionUri/query/:q/page/:page',  {
+      templateUrl: 'app/partials/query.html',
+      controller: 'queryCtrl',
+        //if you define a resolve, the routeProvider will wait till all promises defined here
+        //are resolved before updating the route and the data. This makes the transions smoother.
+        resolve:{
+          getData:['$route' , 'QueryService', 'StartUpService', '$q',  function($route, QueryService, StartUpService, $q) {
+            //the Queryservice is our own service, responcible for communicating with the OCD API.
+            var defer = $q.defer();
+            StartUpService.init().then(function(data1){
 
+
+              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, false, $route.current.params.institutionUri).then(function(data2){
+                defer.resolve(data2);
+              });
+
+
+            });  
+            return defer.promise;
+          }]
+        }    
+      }).
+    when('/institution/:institutionUri/query/:q/page/:page/options/:options',  {
+      templateUrl: 'app/partials/query.html',
+      controller: 'queryCtrl',
+        //if you define a resolve, the routeProvider will wait till all promises defined here
+        //are resolved before updating the route and the data. This makes the transions smoother.
+        resolve:{
+          getData:['$route' , 'QueryService', 'StartUpService', '$q',  function($route, QueryService, StartUpService, $q) {
+            //the Queryservice is our own service, responcible for communicating with the OCD API.
+            var defer = $q.defer();
+            StartUpService.init().then(function(data1){
+
+
+              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options, $route.current.params.institutionUri).then(function(data2){
+                defer.resolve(data2);
+              });
+
+
+            });  
+            return defer.promise;
+          }]
+        }      
+      })/*.
+    otherwise({
       redirectTo: '/'
-    });
+    });*/
 
 
   }]);

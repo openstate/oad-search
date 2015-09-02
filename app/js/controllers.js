@@ -1,11 +1,13 @@
 var OCDAppCtrl = angular.module('OCDAppControllers', ['OCDAppServices']);
 
 //this controler controlls the home screen
-OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q',
-	function ($scope, QueryService, JsonService, $q) {
+OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q', 'MuseumCombineServ',
+	function ($scope, QueryService, JsonService, $q, MuseumCombineServ) {
 		
+		//clearAll
 		QueryService.clearQuery();
 		QueryService.clearFilterOptions();
+		QueryService.clearInstitution();
 
 		$('#myCarousel a').click(function(event){
 			event.preventDefault();
@@ -16,76 +18,27 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 				return 'active';
 		}
 
-		//get sources from the API
-		var sourcePromise = QueryService.getSources();
+		//get the musea list.		
+		var musea = MuseumCombineServ.getMusea();
+
+
+		$scope.carousel = [];
+
+		//push to the carousel in sets of 4
+		for (var i = -1, j= -1; i < musea.length-1; ) {
+			var num = ++i;
+			if((num % 4) === 0 ){
+				$scope.carousel[++j] = [];
+			}
+			$scope.carousel[j].push(musea[i]);
+		}
 		
-		//to be able to update the museau witout redeploy, get the json from git.
-		var museaPromise = JsonService.getMusea();
-
-	
-	
-		//if all are resolved
-		$q.all([sourcePromise, museaPromise]).then(function(data){
-			var terms = data[0].sources;
-			var Musea = data[1].data;
-
-			//add the source counts to the musea
-			for(var i = 0; i < terms.length; i++ ){
-				if(Musea[terms[i].name]){
-					Musea[terms[i].name].count = terms[i].count;
-				}
-			}
-
-			//put the object keys in a array to be able to shuffle
-			var shufflearray = [];
-			for (var key in Musea) {
-				shufflearray.push(key);
-			}
-
-			//standard Fisher-Yates (aka Knuth) Shuffle.
-			function shuffle(array) {
-				var currentIndex = array.length, temporaryValue, randomIndex ;
-
-				// While there remain elements to shuffle...
-				while (0 !== currentIndex) {
-
-				// Pick a remaining element...
-				randomIndex = Math.floor(Math.random() * currentIndex);
-				currentIndex -= 1;
-
-					// And swap it with the current element.
-					temporaryValue = array[currentIndex];
-					array[currentIndex] = array[randomIndex];
-					array[randomIndex] = temporaryValue;
-				}
-				return array;
-			}
-
-			//shuffle it
-			shufflearray = shuffle(shufflearray);
-
-			$scope.carousel = [];
-
-			//push to the $scope in the order of shufflearray.
-			//carrousel shows 4 musea in one go. so split to groups of 4
-			for (var i = -1, j= -1; i < shufflearray.length; ) {
-				var num = ++i;
-				if((num % 4) === 0 ){
-					$scope.carousel[++j] = [];
-				}
-				var obj = Musea[shufflearray[i]];
-				if(obj){
-					obj.name = key;
-					$scope.carousel[j].push(obj);
-				}
-			};
-			
-			$('.carousel').carousel({
-				interval: 2800
-			})
-
+		
+		$('.carousel').carousel({
+			interval: 2800
 		});
 
+	
 		//get the first restult of six example query's.
 		//to be able to update the 6 default examples witout redeploy, get the json from git.
 		JsonService.getHomeQuery().then(function(data){
@@ -105,10 +58,6 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 		});
 
 		
-		// = ["Rembrandt olieverf", "polygoon", "schotel","Stilleven met bloemen","Rotterdam", "kust"];
-		
-		
-
 		$scope.goToQuery = function(){
 			QueryService.newSearchString(this.item.title);
 		};
