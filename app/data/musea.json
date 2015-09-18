@@ -135,5 +135,13 @@
       "Marker Museum"
     ],
     "uri": "marker-museum"
+  },
+  {
+    "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/rce.png",
+    "url": "http://cultureelerfgoed.nl/",
+    "sources": [
+      "Rijkscultureel Erfgoed Beeldbank"
+    ],
+    "uri": "rijkscultureel-erfgoed"
   }
 ]
