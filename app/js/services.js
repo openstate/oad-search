@@ -481,8 +481,12 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 		var jsonService = {};
 		var rights;
 
-		jsonService.getMusea = function(){
+		/*jsonService.getMusea = function(){
 			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/musea.json');
+		};*/
+
+		jsonService.getMusea = function(){
+			return $http.get('/ocd-search/app/data/musea.json');
 		};
 
 		jsonService.getHomeQuery = function(){
