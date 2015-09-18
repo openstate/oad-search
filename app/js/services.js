@@ -59,14 +59,15 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 				var options;
 
 				if(institution){
-					musea = MuseumCombineServ.getMusea();
+					debugger;
+					var musea = MuseumCombineServ.getMusea();
 					for (var i = musea.length - 1; i >= 0; i--) {
 						if(musea[i].uri == institution){
 							options = base64url_encode({
-								'collection': musea[i].sources
-							});	
+								'source_id': musea[i].sources
+							});
 						}
-					};
+					}
 				}
 
 				getHttp(newQuery, newPage, options).then(
@@ -141,11 +142,11 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 						excludeoptions = base64url_decode(newOptions);
 					} 
 
-					if(!excludeoptions['collection']) {
-						includeoptions['collection'] = [];
-						var baseterms = basefacets['collection'].terms;
+					if(!excludeoptions['source_id']) {
+						includeoptions['source_id'] = [];
+						var baseterms = basefacets['source_id'].terms;
 						for(var i = 0;i < baseterms.length; i++){
-							includeoptions['collection'].push(baseterms[i].term);
+							includeoptions['source_id'].push(baseterms[i].term);
 						}
 					}
 
@@ -300,6 +301,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 		};
 
 
+
 		queryService.getFacet = function(facetname, fixedfacet){
 			//build a list off all the terms;
 			var results = [];
@@ -378,6 +380,26 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			return results;
 		};
 
+		//add pretty names to the sources list to show in the leftbar.
+		queryService.getSourceNames = function(){
+			var source_ids = queryService.getFacet('source_id', true);
+			var sources = MuseumCombineServ.getSources();
+			
+			function AddNametoSource(sourceArray, source_id){
+				for (var i = sourceArray.length - 1; i >= 0; i--) {
+					if(source_id.name == sourceArray[i].id){
+							return sourceArray[i].name;
+					}
+				}
+			}
+			for (var i = source_ids.length - 1; i >= 0; i--) {
+				source_ids[i].pretty = AddNametoSource(sources, source_ids[i]);
+			}
+			return source_ids;
+		};
+
+
+		
 		queryService.getFilterOption= function(facetname){
 			if(!!options && options[facetname])
 				return options[facetname];
@@ -440,8 +462,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 ]);
 
 OCDAppServ.factory('SourcesService' , ['$http',
-	function($http){
-		
+	function($http){		
 		SourcesService = {};
 		//ajax call to the sources list
 		SourcesService.getSources = function() {
@@ -450,7 +471,6 @@ OCDAppServ.factory('SourcesService' , ['$http',
 				return data.data;
 			});
 		};
-
 		return SourcesService;
 	}
 ]);
@@ -494,10 +514,11 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 
 //get a list of musea and source information.
 OCDAppServ.factory('MuseumCombineServ' , ['$q', 'JsonService' , 'SourcesService',
-	function($q, JsonService, QueryService){
+	function($q, JsonService, SourcesService){
 		var MuseumCombineServ = {};
 		var MuseaData;
 		var museaCombinePromise = $q.defer();
+		var sources;		
 
 		//get sources from the API
 		var sourcePromise = SourcesService.getSources();
@@ -507,16 +528,15 @@ OCDAppServ.factory('MuseumCombineServ' , ['$q', 'JsonService' , 'SourcesService'
 		function resolveMusea(){
 			//if all are resolved
 			$q.all([sourcePromise, museaPromise]).then(function(data){
-				var terms = data[0].sources;
+				sources = data[0].sources;
 				var Musea = data[1].data;
-
 				//add the source counts to the musea
 				for(var j = 0; j < Musea.length; j++ ){
 					Musea[j].count = 0;
 					for(var k = 0; k < Musea[j].sources.length; k++ ){
-						for(var i = 0; i < terms.length; i++ ){
-							if(Musea[j].sources[k] == terms[i].name){
-								Musea[j].count += terms[i].count;
+						for(var i = 0; i < sources.length; i++ ){
+							if(Musea[j].sources[k] == sources[i].name){
+								Musea[j].count += sources[i].count;
 								break;
 							}
 						}
@@ -573,6 +593,10 @@ OCDAppServ.factory('MuseumCombineServ' , ['$q', 'JsonService' , 'SourcesService'
 
 		MuseumCombineServ.getMusea= function(){
 			return MuseaData;
+		};
+
+		MuseumCombineServ.getSources= function(){
+			return sources;
 		};
 
 		return MuseumCombineServ;

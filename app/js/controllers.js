@@ -287,9 +287,6 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 		
 		$scope.rights = RightUrlService.checkForUrl(itemDetails.meta.rights);
 
-
-
-
 		$scope.description = itemDetails.description;
 		
 		var myMediaItem;
@@ -365,8 +362,11 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService', 
 			$scope.filterResetButtonState = [];
 			$scope.buttontext = [];
 
-			$scope.collection = QueryService.getFacet('collection', true);
-			setButtonText('collection');
+			$scope.source_id2 = QueryService.getFacet('source_id', true);
+			$scope.source_id = QueryService.getSourceNames();
+			setButtonText('source_id');
+
+			
 
 			$scope.author = QueryService.getFacet('author', false);
 			setResetButtonState('author');
@@ -449,13 +449,17 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService', 
 		};
 
 		$scope.updateExcludeList =  function(facetname){
-			//var selected = this.facet;
 			var facet = $scope[facetname];
 
 			var exclude = [];
 			for(var i = 0; i < facet.length; i++){
-				if (!facet[i].active)
-					exclude.push(facet[i].name);
+				if (!facet[i].active){
+					if(facet[i].id)
+						exclude.push(facet[i].id);
+					else
+						exclude.push(facet[i].name);
+				}
+					
 			}
 			QueryService.setFilterOption(facetname, exclude);
 		};

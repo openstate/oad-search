@@ -27,7 +27,7 @@ define("DEF_QUERY", "test"); // gives nice results
  */
 
 $q = filter_input(INPUT_GET, 'q') ? filter_input(INPUT_GET, 'q') : DEF_QUERY;
-$collection = filter_input(INPUT_GET, 'collection') ? filter_input(INPUT_GET, 'collection') : null;
+$source_id = filter_input(INPUT_GET, 'source_id') ? filter_input(INPUT_GET, 'source_id') : null;
 $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : $page ;
 $options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : FALSE;
 
@@ -40,7 +40,7 @@ $size = filter_input(INPUT_GET, 'thumbnailresults') ? $thumbnailsize : $normalsi
 //TODO: fix assiosiative array 'hack'
 if($use_facets){
 $facets = array(
-        'collection' => (object) null, 
+        'source_id' => (object) null, 
         'date'  =>  array(
             'interval' => 'year'
             ),
@@ -51,7 +51,7 @@ $facets = array(
 } else {
     $facets = array(
         //the OCD script cant handle empty facet. For now use only one facet. TODO: fix.
-        'collection' => (object) null
+        'source_id' => (object) null
     );
 }
 

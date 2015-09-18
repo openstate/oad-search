@@ -86,11 +86,9 @@ OCDApp.config(['$routeProvider',
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
 
-
               QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, false, $route.current.params.institutionUri).then(function(data2){
                 defer.resolve(data2);
               });
-
 
             });  
             return defer.promise;
