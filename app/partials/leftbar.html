@@ -10,38 +10,46 @@
   </table>
 
   <h3 class="demo-panel-title">Filters</h3>
-  <h4 class="demo-panel-title">Year 
-    <button ng-disabled="filterResetButtonState['date']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('date')">reset</button>
-  </h4>
-  <div range-slider min="date.min" max="date.max" model-min="date.usermin" model-max="date.usermax" on-handle-up="onHandleUp()" show-values="true"></div>
-  <br>
-  <h4 class="demo-panel-title">Author
-    <button ng-disabled="filterResetButtonState['author']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('author')">reset</button>
-  </h4>
 
-  <table>
-  <tr ng-repeat="facet in author">
-   <td>
-      <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('author')"></td><td>
-      <label for="{{facet.name}}">{{facet.name}} <label></td><td align="right"><small>({{facet.count}})</small></td>
-    
-  </tr>
-</table>
+  <div ng-show="!!date">
+    <h4 class="demo-panel-title">Year 
+      <button ng-disabled="filterResetButtonState['date']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('date')">reset</button>
+    </h4>
+    <div range-slider min="date.min" max="date.max" model-min="date.usermin" model-max="date.usermax" on-handle-up="onHandleUp()" show-values="true"></div>
+    <br>
+  </div>
 
-  <br>
-  <h4 class="demo-panel-title">Rights
-    <button ng-disabled="filterResetButtonState['rights']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('rights')">reset</button>
-  </h4>
-  <table>
-  <tr ng-repeat="facet in rights">
-   <td>
-      <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('rights')"></td><td>
-      <label for="{{facet.name}}"> <span ng-hide="{{facet.isUrl}}" >{{facet.name}}</span> <span ng-show="{{facet.isUrl}}" >{{facet.showName}}</span> <label></td><td> <a ng-show="{{facet.isUrl}}" href="{{facet.Url}}"><span class="glyphicon glyphicon-info-sign" ></span> </a></td><td align="right"><small>({{facet.count}})</small></td>
-   
-  </tr>
-</table>
-  <br>
-  <h4 class="demo-panel-title">Content</h4>
+  <div ng-show="!!author.length">
+    <h4 class="demo-panel-title" >Author
+      <button ng-disabled="filterResetButtonState['author']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('author')">reset</button>
+    </h4>
+    <table>
+      <tr ng-repeat="facet in author">
+       <td>
+          <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('author')"></td><td>
+          <label for="{{facet.name}}">{{facet.name}} <label></td><td align="right"><small>({{facet.count}})</small></td>
+        
+      </tr>
+    </table>
+    <br>
+  </div>
+
+  <div ng-show="!!rights.length">
+    <h4 class="demo-panel-title">Rights
+      <button ng-disabled="filterResetButtonState['rights']" class="btn btn-primary btn-xs pull-right" ng-click="resetFilter('rights')">reset</button>
+    </h4>
+    <table>
+      <tr ng-repeat="facet in rights">
+       <td>
+          <input type="checkbox" value="" id="{{facet.name}}" data-toggle="checkbox" ng-model="facet.active" ng-change="updateExcludeList('rights')"></td><td>
+          <label for="{{facet.name}}"> <span ng-hide="{{facet.isUrl}}" >{{facet.name}}</span> <span ng-show="{{facet.isUrl}}" >{{facet.showName}}</span> <label></td><td> <a ng-show="{{facet.isUrl}}" href="{{facet.Url}}"><span class="glyphicon glyphicon-info-sign" ></span> </a></td><td align="right"><small>({{facet.count}})</small></td>
+       
+      </tr>
+    </table>
+    <br>
+  </div>
+
+  <h3 class="demo-panel-title">Content</h4>
   <label class="checkbox" for="onlyvideo">
    <input type="checkbox" id="onlyvideo" value="" ng-model="videofilter" ng-change="toggleVideo()">
    Video only 

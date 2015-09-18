@@ -78,26 +78,24 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 	function ($scope, QueryService, StateService, $route) {
 
 		$scope.closeMenu = function(){
-			if($('.row-offcanvas.active').length > 0)
-			{
-				StateService.sidebarOpen = false;
-				$('.row-offcanvas').toggleClass('active');
-			}
-			
-		}
+			StateService.sidebarOpen = false;
+			$scope.sideBarOpen = StateService.sidebarOpen;
+		};
 
 		$scope.openMenu = function(){
-			if($('.row-offcanvas.active').length === 0){
-				StateService.sidebarOpen = true;
-				$('.row-offcanvas').toggleClass('active');
-			}
-		}
+			StateService.sidebarOpen = true;
+			$scope.sideBarOpen = StateService.sidebarOpen;
+		};
+
 		//get the data from the Queryservice
 		data = QueryService.getData();
 		console.log(data);
+		
+
 		if(data){
 			$scope.results =  data.queryData.results;
 			updatepaginator();
+			
 		}
 
 		function updatepaginator(){
@@ -150,16 +148,27 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 			QueryService.moveToPage(pagenum);
 		};
 
-		$scope.showsidebar = function (){
-			if($('.row-offcanvas.active').length === 0)
-				StateService.sidebarOpen = true;
-			else
-				StateService.sidebarOpen = false;
+		$scope.sideBarOpen = StateService.sidebarOpen;
 
-			$('.row-offcanvas').toggleClass('active');
+		$scope.showsidebar = function (){
+			StateService.sidebarOpen = ($scope.sideBarOpen) ? false : true;
+			$scope.sideBarOpen = StateService.sidebarOpen;
 		};
 
+		//register a callback so the navbar controller can change as well.
+		var sideBarChangeCallback = function(){
+			$scope.sideBarOpen = StateService.sidebarOpen;
+		};
+
+		StateService.registerSidebarOpenobserverCallback(sideBarChangeCallback);
+
+
+
+		
+		
+
 		$scope.thumbSizeSmall = StateService.thumbSizeSmall;
+		
 		$scope.toggleThumbSize = function() {
 			if($scope.thumbSizeSmall == false){
 				StateService.thumbSizeSmall = true;
@@ -366,9 +375,6 @@ OCDAppCtrl.controller('leftbarCtrl', ['$scope', 'QueryService', 'StateService', 
 			$scope.rights = RightUrlService.returnlinkArray(QueryService.getFacet('rights', false));
 			setResetButtonState('rights');
 
-			if(StateService.sidebarOpen === true)
-				$('.row-offcanvas').toggleClass('active');
-			
 			$scope.showValues = true;
 			
 			$scope.date = QueryService.getDateObject();
@@ -478,6 +484,7 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location', 'Sta
 		var data = QueryService.getData();
 		$scope.query = data.query;
 
+		$scope.sideBarOpen = StateService.sidebarOpen;
 		
 		$scope.onquerypage = (($location.$$path.split('/').indexOf("query") != -1)) ? true : false;
 
@@ -487,12 +494,8 @@ OCDAppCtrl.controller('NavBarCtrl', ['$scope', 'QueryService', '$location', 'Sta
 		};
 
 		$scope.showsidebar = function (){
-			if($('.row-offcanvas.active').length === 0)
-				StateService.sidebarOpen = true;
-			else
-				StateService.sidebarOpen = false;
-
-			$('.row-offcanvas').toggleClass('active');
+			StateService.sidebarOpen = (StateService.sidebarOpen) ? false : true;
+			StateService.notifySidebarOpenobserverCallback();
 		};
 
 		$scope.suggest = function(){

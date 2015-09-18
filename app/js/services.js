@@ -8,7 +8,21 @@ OCDAppServ.factory('StateService' , function(){
 	var stateService = {};
 	stateService.sidebarOpen = false;
 	stateService.thumbSizeSmall = false;
-	stateService.sourceSelect = ['rijksmuseum','fries_museum', 'textielmuseum'];
+
+	var sidebarOpenobserverCallbacks = [];
+
+	//register an observer
+	stateService.registerSidebarOpenobserverCallback = function(callback){
+		sidebarOpenobserverCallbacks.push(callback);
+	};
+
+	//call this when you know it has been changed
+	stateService.notifySidebarOpenobserverCallback = function(){
+		angular.forEach(sidebarOpenobserverCallbacks, function(callback){
+			callback();
+		});
+	};
+
 	return stateService;
 });
 
