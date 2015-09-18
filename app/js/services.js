@@ -59,7 +59,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 				var options;
 
 				if(institution){
-					debugger;
 					var musea = MuseumCombineServ.getMusea();
 					for (var i = musea.length - 1; i >= 0; i--) {
 						if(musea[i].uri == institution){
@@ -484,8 +483,8 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 		jsonService.getMusea = function(){
 			return $http.get('/ocd-search/app/data/musea.json');
 			//for local testing:
-			return $http.get('/ocd-search/app/data/musea.json');
-			//return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/musea.json');
+			//return $http.get('/ocd-search/app/data/musea.json');
+			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/musea.json');
 		};
 
 		jsonService.getHomeQuery = function(){
@@ -538,7 +537,7 @@ OCDAppServ.factory('MuseumCombineServ' , ['$q', 'JsonService' , 'SourcesService'
 					Musea[j].count = 0;
 					for(var k = 0; k < Musea[j].sources.length; k++ ){
 						for(var i = 0; i < sources.length; i++ ){
-							if(Musea[j].sources[k] == sources[i].name){
+							if(Musea[j].sources[k] == sources[i].id){
 								Musea[j].count += sources[i].count;
 								break;
 							}
