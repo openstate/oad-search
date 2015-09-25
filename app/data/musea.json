@@ -3,7 +3,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/Rijksmuseum.png",
     "url": "https://www.rijksmuseum.nl/",
     "sources": [
-      "Rijksmuseum"
+      "rijksmuseum"
     ],
     "uri": "rijksmuseum"
   },
@@ -11,7 +11,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/beeldbank.png",
     "url": "http://www.nationaalarchief.nl/",
     "sources": [
-      "Beeldbank Nationaal Archief"
+      "nationaal_archief_beeldbank"
     ],
     "uri": "beeldbank-nationaal-archief"
   },
@@ -19,7 +19,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/tropen.png",
     "url": "http://tropenmuseum.nl/",
     "sources": [
-      "Tropenmuseum"
+      "tropenmuseum"
     ],
     "uri": "tropenmuseum"
   },
@@ -27,7 +27,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/amsterdamsmuseum.png",
     "url": "http://www.amsterdammuseum.nl/",
     "sources": [
-      "Amsterdam Museum"
+      "amsterdammuseum"
     ],
     "uri": "amsterdam-museum"
   },
@@ -35,7 +35,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/Open_Beelden_logo.png",
     "url": "http://www.openbeelden.nl/",
     "sources": [
-      "Open Beelden"
+      "openbeelden"
     ],
     "uri": "open-beelden"
   },
@@ -43,7 +43,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/fries.png",
     "url": "http://www.friesmuseum.nl/",
     "sources": [
-      "Fries Museum"
+      "fries_museum"
     ],
     "uri": "fries-museum"
   },
@@ -51,7 +51,8 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/kb.png",
     "url": "http://www.kb.nl/",
     "sources": [
-      "Koninklijke Bibliotheek - ByvanckB"
+      "kb_byvanckb",
+      "kb_watermarks"
     ],
     "uri": "koninklijke-bibliotheek"
   },
@@ -59,7 +60,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/centraalutrecht.png",
     "url": "http://centraalmuseum.nl/",
     "sources": [
-      "Centraal Museum Utrecht"
+      "centraal_museum_utrecht"
     ],
     "uri": "centraal-Museum-utrecht"
   },
@@ -67,7 +68,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/textiel.png",
     "url": "http://www.textielmuseum.nl/",
     "sources": [
-      "TextielMuseum"
+      "textielmuseum"
     ],
     "uri": "textielMuseum"
   },
@@ -75,7 +76,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/visserij.png",
     "url": "http://www.visserijmuseum.com/",
     "sources": [
-      "Visserijmuseum Zoutkamp"
+      "zoutkamp"
     ],
     "uri": "visserijmuseum-zoutkamp"
   },
@@ -83,7 +84,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/leiden.png",
     "url": "https://erfgoedleiden.nl/",
     "sources": [
-      "Beeldbank Erfgoed Leiden en omstreken"
+      "erfgoed_leiden_beeldbank"
     ],
     "uri": "beeldbank-erfgoed-leiden"
   },
@@ -91,7 +92,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/UU.png",
     "url": "http://bc.library.uu.nl/",
     "sources": [
-      "Universiteit Utrecht Kaarten"
+      "uukaarten"
     ],
     "uri": "universiteit-utrecht"
   },
@@ -99,7 +100,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/rotterdam.png",
     "url": "http://museumrotterdam.nl/",
     "sources": [
-      "Museum Rotterdam"
+      "museum_rotterdam"
     ],
     "uri": "museum-rotterdam"
   },
@@ -107,7 +108,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/tilburg-regionaal-archief.png",
     "url": "http://www.regionaalarchieftilburg.nl/",
     "sources": [
-      "Regionaal Archief Tilburg"
+      "ra_tilburg"
     ],
     "uri": "regionaal-archief-tilburg"
   },
@@ -115,7 +116,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/ede.png",
     "url": "https://www.ede.nl/gemeente/gemeentearchief/",
     "sources": [
-      "Gemeentearchief Ede"
+      "gemeente_ede"
     ],
     "uri": "gemeentearchief-ede"
   },
@@ -123,8 +124,8 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/regarchiefalkmaar.png",
     "url": "https://www.regionaalarchiefalkmaar.nl/",
     "sources": [
-      "Regionaal Archief Alkmaar Bonda",
-      "Regionaal Archief Alkmaar Bosboom"
+      "archief_alkmaar_bonda",
+      "archief_alkmaar_bosboom"
     ],
     "uri": "regionaal-archief-alkmaar"
   },
@@ -132,7 +133,7 @@
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/marker.png",
     "url": "http://www.markermuseum.nl/",
     "sources": [
-      "Marker Museum"
+      "marker_museum"
     ],
     "uri": "marker-museum"
   },
@@ -143,6 +144,16 @@
       "rce"
     ],
     "uri": "rijkscultureel-erfgoed"
-  }
+  },
+  {
+    "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/nijmegen.png",
+    "url": "http://www2.nijmegen.nl/wonen/oudste_stad/Archief",
+    "sources": [
+      "ra_nijmegen_grinten",
+      "ra_nijmegen_doornroosje",
+      "ra_nijmegen_vierdaagse"
 
+        ],
+    "uri": "regionaal-archief-nijmegen"
+  }
 ]
