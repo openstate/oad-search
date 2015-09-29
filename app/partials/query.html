@@ -1,113 +1,81 @@
-  <div ng-swipe-left="closeMenu()" ng-swipe-right="openMenu()">
+
   <!--include the navbar-->
- <div ng-include="'app/partials/nav.html'"></div>
+<div ng-include="'app/partials/nav.html'"></div>
   
   <!--include the bootstrap modal for alerts  -->
- <div ng-include="'app/partials/error.html'"></div>
+<div ng-include="'app/partials/error.html'"></div>
 
-<div class="container-fluid" >
-  
-
-<div class="row row-offcanvas row-offcanvas-left" ng-class="{active:sideBarOpen}" > 
-  <!--the left bar is included -->
-  <div ng-include="'app/partials/leftbar.html'"></div>
-  
-  <!--the actual body of the page -->
-  <div id="contentcontainer" class="col-xs-12 col-lg-10 content" ng-class="{'col-md-12':!sideBarOpen, 'col-md-9':sideBarOpen, 'col-sm-12':!sideBarOpen, 'col-sm-9':sideBarOpen}">
-  <button type="button" class="btn btn-primary menubtn" ng-click="showsidebar()">&lt;&lt; Menu</button>
-    <!--display the firts paginator-->
-    <div class="text-center" >
-      <div class="thumbnailtoggle pull-right" ng-hide="!!!results.length">
-        <button type="navbar-toggle" ng-click="toggleThumbSize('small')" style="padding: 6px 10px; height: 36px;">
-           <span ng-hide="thumbSizeSmall" class="glyphicon glyphicon-th"></span>
-           <span ng-show="thumbSizeSmall" class="glyphicon glyphicon-th-large"></span>
-        </button>
-      </div>
-      <ul class="pagination">
-        <li ng-repeat="page in paginator" class="{{page.class}}" ><a href="" ng-click="moveToPage()">{{page.text}}</a></li>
-      </ul>
-
-    </div>
-
-    <div ng-show="!!!results.length">
-      <div  class="row text-center">
-        <br><br>
-        You're search returned no hits.
-      </div>
-    </div>
-
-    <div class="text-center">
-      <div class="modal-dialog" ng-show="loadingView">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">loading...</h4> 
-          </div>
-        </div>
-      </div> 
-    </div>
-
-    <!--display the results -->
-    <div ng-hide="thumbSizeSmall" ng-repeat="item in results" ng-controller="ItemCtrl" class="col-sm-6 col-md-4">
-      <div class="thumbnail" >
-        <div class="thumb-image-container">
-        <video  ng-show="showPlayer" width="100%" height="100%" controls ng-attr-poster="{{imgurl}}" preload='none'>
-          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
-     
-          Your browser does not support the video tag.
-        </video>
-        <a ng-hide="showPlayer" href="{{detailUrl}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
-      </div>
-        <div class="caption">
-          <div class="thumb-body"> 
-            <a href="{{detailUrl}}"><h4>{{title}}</h4></a>
-            <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> {{date}}</p>
-            <p> {{rights.name}} <a ng-show="{{rights.isUrl}}" href="{{rights.Url}}"><span class="glyphicon glyphicon-info-sign" ></span> </a></p>
-          </div>
-          <div class="thumb-footer"> 
-            <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div ng-show="thumbSizeSmall" ng-repeat="item in results" ng-controller="ItemCtrl" class="col-xs-6 col-sm-4 col-md-2">
-      <div class="thumbnail thumbnail-small" >
-        <div class="thumb-image-container thumb-image-container-small">
-        <video  ng-show="showPlayer" width="100%" height="100%" controls ng-attr-poster="{{imgurl}}" preload='none'>
-          <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
-     
-          Your browser does not support the video tag.
-        </video>
-        <a ng-hide="showPlayer" href="{{detailUrl}}" class="thumb-image thumb-image-small" style="background-image: url({{imgurl}})"></a>
-      </div>
-      <div class="caption">
-          <div class="thumb-body thumb-body-small"> 
-            <a href="{{detailUrl}}"><span class="smallthumbtext">{{title}}</span></a>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container-fluid" ng-swipe-left="closeMenu()" ng-swipe-right="openMenu()">
+  <div class="row row-offcanvas row-offcanvas-left" ng-class="{active:sideBarOpen}" > 
+    <!--the left bar is included -->
+    <div ng-include="'app/partials/leftbar.html'"></div>
     
-    <div class="text-center">
-      <div class="modal-dialog modal-dialog-bottom" ng-show="loadingView">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">loading...</h4> 
-          </div>
+    <!--the actual body of the page -->
+    <div id="contentcontainer" class="col-xs-12 col-lg-10 content" ng-class="{'col-md-12':!sideBarOpen, 'col-md-9':sideBarOpen, 'col-sm-12':!sideBarOpen, 'col-sm-9':sideBarOpen}">
+    <button type="button" class="btn btn-primary menubtn" ng-click="showsidebar()">&lt;&lt; Menu</button>
+      <div class="row" >
+        <div class="thumbnailtoggle pull-right" ng-hide="!!!results.length">
+          <button type="navbar-toggle" ng-click="toggleThumbSize('small')" style="padding: 6px 10px; height: 36px;margin: 0 10px 5px 0;">
+             <span ng-hide="thumbSizeSmall" class="glyphicon glyphicon-th"></span>
+             <span ng-show="thumbSizeSmall" class="glyphicon glyphicon-th-large"></span>
+          </button>
         </div>
-      </div> 
-    </div>
+      </div>
 
-    <!--the pagenation -->
-    <div class="text-center">
-      <ul class="pagination">
-        <li ng-repeat="page in paginator" class="{{page.class}}"  ><a href="" ng-click="moveToPage()">{{page.text}}</a></li>
-      </ul>
-    </div>
+      <div ng-show="!!!results.length">
+        <div  class="row text-center">
+          <br><br>
+          You're search returned no hits.
+        </div>
+      </div>
 
+      <!--display the results -->
+      <div infinite-scroll='nextPage()' infinite-scroll-disabled='nextPageLoading' infinite-scroll-distance='1'>
+        <div ng-repeat="item in results" ng-controller="ItemCtrl" 
+          ng-class="{'col-sm-6 col-md-4': !thumbSizeSmall, 'col-xs-4 col-sm-3 col-md-2': thumbSizeSmall}">
+          <div class="thumbnail" ng-class="{'thumbnail-small': thumbSizeSmall}" >
+            <div class="thumb-image-container">
+              <video  ng-show="showPlayer" width="100%" height="100%" controls ng-attr-poster="{{imgurl}}" preload='none'>
+                <source ng-repeat="source in videosources" src="{{source.url}}" type="{{source.content_type}}">
+                  Your browser does not support the video tag.
+              </video>
+              <a ng-hide="showPlayer" href="{{detailUrl}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
+            </div>
+
+            <div class="caption" ng-hide="thumbSizeSmall">
+              <div class="thumb-body"> 
+                <a href="{{detailUrl}}"><h4>{{title}}</h4></a>
+                <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> {{date}}</p>
+                <p> {{rights.name}} <a ng-show="{{rights.isUrl}}" href="{{rights.Url}}"><span class="glyphicon glyphicon-info-sign" ></span> </a></p>
+              </div>
+              <div class="thumb-footer"> 
+                <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
+              </div>
+            </div>
+
+            <div class="caption" ng-show="thumbSizeSmall">
+              <div class="thumb-body thumb-body-small"> 
+                <a href="{{detailUrl}}"><span class="smallthumbtext">{{title}}</span></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- Spacer for infinatescroll, without div is height:0 -->
+        <div style='clear: both;'></div>
+      </div>
+
+      <div class="text-center row">
+        <div class="modal-dialog" ng-show="nextPageLoading">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{{loadingText}}</h4> 
+            </div>
+          </div>
+        </div> 
+      </div>
+
+    </div>
   </div>
 </div>
-</div>
-</div>
-</div>
+

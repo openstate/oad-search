@@ -2,7 +2,8 @@
 var OCDApp = angular.module('OCDApp', [
 	'ngRoute',           //routes used below
   'ngTouch',
-  'ui-rangeSlider',    //range-slider used in left bar       
+  'ui-rangeSlider',    //range-slider used in left bar
+  'infinite-scroll',   //infinite scroll    
   'OCDAppServices',    //our services
   'OCDAppControllers'  //our controlers
   ]);
@@ -33,10 +34,7 @@ OCDApp.config(['$routeProvider',
         }]
       }
     }).
-    when('/query/:q', {
-      redirectTo: '/query/:q/page/1'
-    }).
-    when('/query/:q/page/:page',  {
+    when('/query/:q',  {
       templateUrl: 'app/partials/query.html',
       controller: 'queryCtrl',
         //if you define a resolve, the routeProvider will wait till till all promises defined here
@@ -46,7 +44,7 @@ OCDApp.config(['$routeProvider',
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
-              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1).then(function(data2){
                 defer.resolve(data2);
               });
             });  
@@ -54,7 +52,7 @@ OCDApp.config(['$routeProvider',
           }]
         }
       }).
-    when('/query/:q/page/:page/options/:options',  {
+    when('/query/:q/options/:options',  {
       templateUrl: 'app/partials/query.html',
       controller: 'queryCtrl',
         //if you define a resolve, the routeProvider will wait till till all promises defined here
@@ -64,7 +62,7 @@ OCDApp.config(['$routeProvider',
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
-              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, $route.current.params.options).then(function(data2){
                 defer.resolve(data2);
               });
             });  
@@ -73,9 +71,9 @@ OCDApp.config(['$routeProvider',
         }
       }).
     when('/institution/:institutionUri/', {
-      redirectTo: '/institution/:institutionUri/query/de/page/1'
+      redirectTo: '/institution/:institutionUri/query/de/'
     }).
-    when('/institution/:institutionUri/query/:q/page/:page',  {
+    when('/institution/:institutionUri/query/:q/',  {
       templateUrl: 'app/partials/query.html',
       controller: 'queryCtrl',
         //if you define a resolve, the routeProvider will wait till all promises defined here
@@ -86,7 +84,7 @@ OCDApp.config(['$routeProvider',
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
 
-              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, false, $route.current.params.institutionUri).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, false, $route.current.params.institutionUri).then(function(data2){
                 defer.resolve(data2);
               });
 
@@ -95,7 +93,7 @@ OCDApp.config(['$routeProvider',
           }]
         }    
       }).
-    when('/institution/:institutionUri/query/:q/page/:page/options/:options',  {
+    when('/institution/:institutionUri/query/:q/options/:options',  {
       templateUrl: 'app/partials/query.html',
       controller: 'queryCtrl',
         //if you define a resolve, the routeProvider will wait till all promises defined here
@@ -107,7 +105,7 @@ OCDApp.config(['$routeProvider',
             StartUpService.init().then(function(data1){
 
 
-              QueryService.httpGetNewOCDData($route.current.params.q, $route.current.params.page, $route.current.params.options, $route.current.params.institutionUri).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, $route.current.params.options, $route.current.params.institutionUri).then(function(data2){
                 defer.resolve(data2);
               });
 
@@ -127,16 +125,11 @@ OCDApp.config(['$routeProvider',
 OCDApp.config(['$provide', function($provide) {
             $provide.decorator('$exceptionHandler', ['$delegate', '$injector', function($delegate, $injector) {
                 return function(exception) {
-
-
                     $injector.invoke(['$rootScope', function($rootScope) {
-
                         $rootScope.$broadcast('error', exception.message);
                     }]);
-
-
-                    return $delegate(exception);
-
+                
+                return $delegate(exception);
                 };
             }]);
         }]);

@@ -1,5 +1,5 @@
  body {
- 	padding-top: 70px;
+ 	padding-top: 45px;
 
  	overflow-x:hidden;
   width:100%;
@@ -175,7 +175,7 @@ html{height:100%;}
   overflow: hidden;
  }
 
- .thumb-image-container-small {
+ .thumbnail-small  .thumb-image-container {
   display: block;
   height: 140px;
   overflow: hidden;
@@ -190,11 +190,10 @@ html{height:100%;}
  	background-size: cover;
  }
 
-.thumb-image-small {
-  height: 135px;
-  background-size: cover;
-  width: 135px;
- }
+.thumbnail-small .thumb-image {
+    height: 135px;
+    width: 135px;
+}
 
  .thumb-body {
  	padding: 0px 9px;
@@ -203,7 +202,7 @@ html{height:100%;}
   overflow-y: auto; 
  }
 
- .thumb-body-small {
+ .thumbnail-small .thumb-body {
     height: 42px;
     overflow: hidden;
  }

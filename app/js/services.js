@@ -267,23 +267,12 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			query = "";
 			};
 
-		//move to the requested page.
-		queryService.moveToPage = function(newPage){
-			var urlstring = 'query/'+query+"/page/"+newPage;
-			
-			//only add the options if they are defined
-			urlstring += (optionsString !== undefined) ? "/options/" + optionsString : "";
-
-			//if a institution is defined. prepend
-			if(institutionName){
-				urlstring = "institution/" + institutionName + "/" + urlstring;
-			}
-			
-			$location.path(urlstring);
+		queryService.getNextPage = function(){
+			return getHttp(query, ++page, undefined, false);
 		};
 
 		queryService.newSearchString = function(queryString){
-			var urlstring = 'query/'+queryString+"/page/1";
+			var urlstring = 'query/'+queryString;
 
 			//reset the basefacets.
 			basefacets = false;
@@ -423,10 +412,10 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 			//if options is not empty encode option.
 			if(!jQuery.isEmptyObject(options)){
 				var encodeOptions = base64url_encode(options);
-				urlstring = 'query/'+query+"/page/1/options/"+encodeOptions;
+				urlstring = 'query/'+query+"/options/"+encodeOptions;
 			}
 			else {
-				urlstring = 'query/'+query+"/page/1";
+				urlstring = 'query/'+query;
 
 				//clear the optionstring
 				optionsString = undefined;

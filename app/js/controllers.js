@@ -21,7 +21,6 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 		//get the musea list.		
 		var musea = MuseumCombineServ.getMusea();
 
-
 		$scope.carousel = [];
 
 		//push to the carousel in sets of 4
@@ -37,7 +36,6 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 		$('.carousel').carousel({
 			interval: 2800
 		});
-
 	
 		//get the first restult of six example query's.
 		//to be able to update the 6 default examples witout redeploy, get the json from git.
@@ -87,65 +85,41 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 			$scope.sideBarOpen = StateService.sidebarOpen;
 		};
 
+
 		//get the data from the Queryservice
 		data = QueryService.getData();
 		console.log(data);
 		
+		$scope.nextPageLoading = true;
 
 		if(data){
 			$scope.results =  data.queryData.results;
-			updatepaginator();
-			
+			if($scope.results.length > 1)
+				$scope.nextPageLoading = false;
 		}
 
-		function updatepaginator(){
+		$scope.loadingText = 'loading...';
+		var noMoreResults = false;
 
-			if(data.queryData.pages < 2){
-				$scope.paginator = false;
+		$scope.nextPage = function (){
+			$scope.nextPageLoading = true;
+			if(noMoreResults){
+				setTimeout(function(){ $scope.nextPageLoading = false; }, 100);
 				return;
 			}
-			
-			var start_pagination = ((Math.ceil(data.page / 6) - 1) * 6) + 1;
-			var end_pagination = start_pagination + 5;
+			QueryService.getNextPage().then(function(data) {
+				if(data.results.length === 0){
+					$scope.loadingText = 'no more results';
+					noMoreResults = true;
+					return;
+				}
 
-			if (end_pagination > data.queryData.pages) {
-				end_pagination = data.queryData.pages;
-			}
-
-			//build a array for the paginator.
-			var pagelist = [{
-				class: (start_pagination == 1) ? "disabled" : "",
-				pagenum: start_pagination - 1,
-				text:"<<"
-			}];
-			
-			for(var i = start_pagination; i <= end_pagination; i++){
-				pagelist.push({
-					class: (data.page == i) ? "active" : "",
-					pagenum:i,
-					text:i
-				});
-			}
-
-			pagelist.push({
-				class: (end_pagination == data.queryData.pages) ? "disabled" : "",
-				pagenum:end_pagination + 1,
-				text:">>"
+				for (var i = 0; i < data.results.length; i++) {
+					$scope.results.push(data.results[i]);
+				};
+				
+				$scope.nextPageLoading = false;
 			});
-
-			$scope.paginator = pagelist;
-		}
-
-
-		//ask the service to move to a new page.
-		$scope.moveToPage = function(){
-			var pagenum = this.page.pagenum;
-			
-			//to make the interface responsive, update the paginator instantly
-			data.page = pagenum;
-			updatepaginator();
-
-			QueryService.moveToPage(pagenum);
 		};
 
 		$scope.sideBarOpen = StateService.sidebarOpen;
@@ -161,11 +135,6 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 		};
 
 		StateService.registerSidebarOpenobserverCallback(sideBarChangeCallback);
-
-
-
-		
-		
 
 		$scope.thumbSizeSmall = StateService.thumbSizeSmall;
 		
