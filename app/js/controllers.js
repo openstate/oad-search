@@ -69,6 +69,23 @@ OCDAppCtrl.controller('homeCtrl', ['$scope', 'QueryService', 'JsonService', '$q'
 			QueryService.clearFilterOptions();
 	}]);
 
+	OCDAppCtrl.controller('vierNulVierCtrl', ['$scope', 'QueryService', '$location',
+		function ($scope,  QueryService, $location) {
+			QueryService.clearQuery();
+			QueryService.clearFilterOptions();
+			$scope.usedPage = false;
+
+			var path = 	$location.path().split("/");
+			var pageLoc = path.indexOf('page');
+
+			if(pageLoc > -1){
+				$scope.usedPage = true;
+				path.splice(pageLoc, 2);
+				$scope.newUrl = '#' + path.join('/');
+			}
+
+	}]);
+
 
 
 //this controlls the query screen

@@ -114,10 +114,11 @@ OCDApp.config(['$routeProvider',
             return defer.promise;
           }]
         }      
-      })/*.
-    otherwise({
-      redirectTo: '/'
-    });*/
+      })
+    .otherwise({
+      templateUrl: 'app/partials/viernulvier.html',
+      controller: 'vierNulVierCtrl'
+    });
 
 
   }]);
