@@ -31,7 +31,9 @@ $source_id = filter_input(INPUT_GET, 'source_id') ? filter_input(INPUT_GET, 'sou
 $page = filter_input(INPUT_GET, 'page') ? filter_input(INPUT_GET, 'page') : $page ;
 $options = filter_input(INPUT_GET, 'options') ? filter_input(INPUT_GET, 'options') : FALSE;
 
-$use_facets = filter_input(INPUT_GET, 'use_facets') ? FALSE : TRUE;
+$use_facets = filter_input(INPUT_GET, 'use_facets') && filter_input(INPUT_GET, 'use_facets') == 'false' ? 
+   FALSE : TRUE;
+
 
 $size = filter_input(INPUT_GET, 'thumbnailresults') ? $thumbnailsize : $normalsize;
 

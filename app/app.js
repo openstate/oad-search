@@ -44,7 +44,7 @@ OCDApp.config(['$routeProvider',
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
-              QueryService.httpGetNewOCDData($route.current.params.q, 1).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, true).then(function(data2){
                 defer.resolve(data2);
               });
             });  
@@ -62,7 +62,7 @@ OCDApp.config(['$routeProvider',
             //the Queryservice is our own service, responcible for communicating with the OCD API.
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
-              QueryService.httpGetNewOCDData($route.current.params.q, 1, $route.current.params.options).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, true, $route.current.params.options).then(function(data2){
                 defer.resolve(data2);
               });
             });  
@@ -84,7 +84,7 @@ OCDApp.config(['$routeProvider',
             var defer = $q.defer();
             StartUpService.init().then(function(data1){
 
-              QueryService.httpGetNewOCDData($route.current.params.q, 1, false, $route.current.params.institutionUri).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, true, false, $route.current.params.institutionUri).then(function(data2){
                 defer.resolve(data2);
               });
 
@@ -105,7 +105,7 @@ OCDApp.config(['$routeProvider',
             StartUpService.init().then(function(data1){
 
 
-              QueryService.httpGetNewOCDData($route.current.params.q, 1, $route.current.params.options, $route.current.params.institutionUri).then(function(data2){
+              QueryService.httpGetNewOCDData($route.current.params.q, 1, true, $route.current.params.options, $route.current.params.institutionUri).then(function(data2){
                 defer.resolve(data2);
               });
 

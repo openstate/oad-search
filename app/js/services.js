@@ -69,10 +69,9 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 					}
 				}
 
-				getHttp(newQuery, newPage, options).then(
+				getHttp(newQuery, newPage, true, options).then(
 					function(data) {
 						basefacets = data.facets;
-						
 						deferred.resolve();
 					},
 					function(reason) {
@@ -84,7 +83,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 		}
 
 		//ajax call to the php script return a promise.
-		function getHttp(newQuery, newPage, newOptions, useFacets){
+		function getHttp(newQuery, newPage, useFacets, newOptions){
 			var params = {q:newQuery, page:newPage, options:newOptions, use_facets:useFacets};
 			
 			if(StateService.thumbSizeSmall == true){
@@ -115,10 +114,10 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 
 		queryService.simplehttpGet = function(newQuery){
 			//for the simple get no facets or options are needed.
-			return getHttp(newQuery, 1, undefined, false);
+			return getHttp(newQuery, 1, false);
 		};
 
-		queryService.httpGetNewOCDData = function(newQuery, newPage, newOptions, institution){
+		queryService.httpGetNewOCDData = function(newQuery, newPage, useFacets, newOptions, institution){
 			
 			/**************************
 			first detenmine if basefacets need to be get.
@@ -178,9 +177,9 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 					var includeoptionsstring = toJSONandCompres(includeoptions);
 
 					console.log(includeoptionsstring);
-					return getHttp(newQuery, newPage, includeoptionsstring);
+					return getHttp(newQuery, newPage, useFacets, includeoptionsstring);
 				} else {
-					return getHttp(newQuery, newPage);
+					return getHttp(newQuery, newPage, useFacets);
 				}
 			})
 			//then if everything completed, do something with the data.
@@ -265,10 +264,10 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 		//clear the query, if navegating to home screen.
 		queryService.clearQuery = function(){
 			query = "";
-			};
+		};
 
 		queryService.getNextPage = function(){
-			return getHttp(query, ++page, undefined, false);
+			return queryService.httpGetNewOCDData(query, ++page, false, optionsString, institutionName);
 		};
 
 		queryService.newSearchString = function(queryString){

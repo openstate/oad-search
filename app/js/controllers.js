@@ -85,7 +85,6 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 			$scope.sideBarOpen = StateService.sidebarOpen;
 		};
 
-
 		//get the data from the Queryservice
 		data = QueryService.getData();
 		console.log(data);
@@ -107,8 +106,9 @@ OCDAppCtrl.controller('queryCtrl', ['$scope', 'QueryService', 'StateService','$r
 				setTimeout(function(){ $scope.nextPageLoading = false; }, 100);
 				return;
 			}
-			QueryService.getNextPage().then(function(data) {
-				if(data.results.length === 0){
+			QueryService.getNextPage().then(function() {
+				var data = QueryService.getData().queryData;
+				if(!data || data.results.length === 0){
 					$scope.loadingText = 'no more results';
 					noMoreResults = true;
 					return;

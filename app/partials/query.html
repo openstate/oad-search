@@ -1,11 +1,10 @@
-
   <!--include the navbar-->
 <div ng-include="'app/partials/nav.html'"></div>
   
   <!--include the bootstrap modal for alerts  -->
 <div ng-include="'app/partials/error.html'"></div>
 
-<div class="container-fluid" ng-swipe-left="closeMenu()" ng-swipe-right="openMenu()">
+<div class="container-fluid container-query" ng-swipe-left="closeMenu()" ng-swipe-right="openMenu()">
   <div class="row row-offcanvas row-offcanvas-left" ng-class="{active:sideBarOpen}" > 
     <!--the left bar is included -->
     <div ng-include="'app/partials/leftbar.html'"></div>
