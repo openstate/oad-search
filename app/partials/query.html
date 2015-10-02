@@ -40,10 +40,10 @@
               </video>
               <a ng-hide="showPlayer" href="{{detailUrl}}" class="thumb-image" style="background-image: url({{imgurl}})"></a>
             </div>
-
+            <!-- Big thumbnail -->
             <div class="caption" ng-hide="thumbSizeSmall">
-              <div class="thumb-body"> 
-                <a href="{{detailUrl}}"><h4>{{title}}</h4></a>
+              <div class="thumb-body">
+                  <h4><a href="{{detailUrl}}">{{title  | cut:true:105:' ...'}}</a></h4>
                 <p><span title="{{authorhoover}}"> {{author}}<span class="orange">{{authorhooverindicate}}</span></span> {{date}}</p>
                 <p> {{rights.name}} <a ng-show="{{rights.isUrl}}" href="{{rights.Url}}"><span class="glyphicon glyphicon-info-sign" ></span> </a></p>
               </div>
@@ -51,14 +51,13 @@
                 <p><a href="{{originalCollectionUrl}}">{{collection}}</a></p>
               </div>
             </div>
-
+            <!-- Small thumbnail  -->
             <div class="caption" ng-show="thumbSizeSmall">
               <div class="thumb-body thumb-body-small"> 
                 <a href="{{detailUrl}}"><span class="smallthumbtext">{{title}}</span></a>
               </div>
             </div>
           </div>
-
         </div>
         <!-- Spacer for infinatescroll, without div is height:0 -->
         <div style='clear: both;'></div>
