@@ -100,7 +100,7 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 				
 				if(data.data.error){
 					console.log("phperror");
-					console.log(data.error);
+					console.log(data.data.error);
 					queryData = false;
 					throw {
 						message: 'php get failed, check console for details.'
@@ -169,9 +169,6 @@ OCDAppServ.factory('QueryService' , ['$rootScope', '$http', '$location', '$q', '
 								}
 							}
 						}
-					}
-					if(StateService.thumbSizeSmall === true){
-						includeoptions['thumbnailresults'] = true;
 					}
 
 					var includeoptionsstring = toJSONandCompres(includeoptions);
