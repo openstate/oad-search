@@ -125,7 +125,8 @@
     "url": "https://www.regionaalarchiefalkmaar.nl/",
     "sources": [
       "archief_alkmaar_bonda",
-      "archief_alkmaar_bosboom"
+      "archief_alkmaar_bosboom",
+      "archief_alkmaar_voor_1900"
     ],
     "uri": "regionaal-archief-alkmaar"
   },
