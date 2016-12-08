@@ -164,5 +164,13 @@
       "utrechts_archief_saenredam"
     ],
     "uri": "utrechts-archief"
+  },
+  {
+    "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/gelderland.png",
+    "url": "http://www.collectiegelderland.nl/",
+    "sources": [
+      "collectie_gelderland"
+    ],
+    "uri": "collectie-gelderland"
   }
 ]
