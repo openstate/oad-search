@@ -140,7 +140,7 @@ OCDApp.config(function($sceDelegateProvider) {
     // Allow same origin resource loads.
     'self',
     // Allow loading from our assets domain.  Notice the difference between * and **.
-    'http://api.openarchaeologydata.nl/**'
+    'http://api-nl.archaeologydata.com/**'
   ]);
 });
 

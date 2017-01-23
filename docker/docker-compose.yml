@@ -9,8 +9,8 @@ services:
       - ../:/usr/share/nginx/html/
     restart: always
     networks:
-#      - nginx-load-balancer
-      - oad-search
+      - nginx-load-balancer
+      - oad-search-nl
   c-oad-search-app:
     build:
       context: ..
@@ -19,9 +19,9 @@ services:
       - ../php/:/usr/share/nginx/html/php/
     restart: always
     networks:
-      - oad-search
+      - oad-search-nl
 networks:
-  oad-search:
-#  nginx-load-balancer:
-#    external:
-#      name: docker_nginx-load-balancer
+  oad-search-nl:
+  nginx-load-balancer:
+    external:
+      name: docker_nginx-load-balancer
