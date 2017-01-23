@@ -1,6 +1,6 @@
 var OCDAppServ = angular.module('OCDAppServices', []);
 
-var baseURLprod = "http://api.openarchaeologydata.nl/v0/";
+var baseURLprod = "http://api-nl.archaeologydata.com/v0/";
 var baseURLdev = "http://localhost:5000/v0/";
 var baseURL = baseURLprod;
 
@@ -468,11 +468,11 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 		jsonService.getMusea = function(){
 			//for local testing:
 			//return $http.get('/ocd-search/app/data/musea.json');
-			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/musea.json');
+			return $http.get('https://raw.githubusercontent.com/openstate/oad-search/master/app/data/musea.json');
 		};
 
 		jsonService.getHomeQuery = function(){
-			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/homequerys.json');
+			return $http.get('https://raw.githubusercontent.com/openstate/oad-search/master/app/data/homequerys.json');
 		};
 
 		jsonService.resolveRights = function(){
@@ -483,7 +483,7 @@ OCDAppServ.factory('JsonService' , ['$http', '$q',
 				return defer.promise;
 			}
 
-			return $http.get('https://raw.githubusercontent.com/openstate/ocd-search/master/app/data/rights.json')
+			return $http.get('https://raw.githubusercontent.com/openstate/oad-search/master/app/data/rights.json')
 				.then(function(data){
 					rights = data.data;
 				});

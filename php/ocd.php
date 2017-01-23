@@ -12,7 +12,7 @@ class Ocd implements Iterator {
     //http://api.opencultuurdata.nl/
     //http://localhost:5000/
     public function __construct() {
-        $this->api_url = 'http://api.openarchaeologydata.nl/';
+        $this->api_url = 'http://api-nl.archaeologydata.com/';
         $this->api_version = 'v0';
     }
 
