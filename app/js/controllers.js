@@ -199,7 +199,7 @@ OCDAppCtrl.controller('ItemCtrl' , ['$scope', '$http', 'DetailService', 'RightUr
 		if(isQueryView){
 			itemDetails = $scope.item._source;
 			$scope.apiId = $scope.item._id || "";
-			$scope.apiUrl = itemDetails.meta.ocd_url || "";
+			$scope.apiUrl = itemDetails.meta.oad_url || "";
 			$scope.detailUrl = DetailService.getURL($scope.apiUrl);
 
 			//only show year or century in query
