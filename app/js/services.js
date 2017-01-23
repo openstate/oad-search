@@ -1,6 +1,6 @@
 var OCDAppServ = angular.module('OCDAppServices', []);
 
-var baseURLprod = "http://api.opencultuurdata.nl/v0/";
+var baseURLprod = "http://api.openarchaeologydata.nl/v0/";
 var baseURLdev = "http://localhost:5000/v0/";
 var baseURL = baseURLprod;
 

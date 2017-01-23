@@ -1,0 +1,27 @@
+version: '2'
+services:
+  c-oad-search-nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - ./nginx/:/etc/nginx/
+      - ../:/usr/share/nginx/html/
+    restart: always
+    networks:
+#      - nginx-load-balancer
+      - oad-search
+  c-oad-search-app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - ../php/:/usr/share/nginx/html/php/
+    restart: always
+    networks:
+      - oad-search
+networks:
+  oad-search:
+#  nginx-load-balancer:
+#    external:
+#      name: docker_nginx-load-balancer

@@ -1,6 +1,14 @@
 [
   {
     "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/Rijksmuseum.png",
+    "url": "https://www.pzh.nl/",
+    "sources": [
+      "pzh"
+    ],
+    "uri": "pzh"
+  },
+  {
+    "img": "https://raw.githubusercontent.com/openstate/ocd-search/master/app/img/sourcelogo/Rijksmuseum.png",
     "url": "https://www.rijksmuseum.nl/",
     "sources": [
       "rijksmuseum"
