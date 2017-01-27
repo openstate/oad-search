@@ -14,5 +14,13 @@
       "pzh"
     ],
     "uri": "pzh"
+  },
+  {
+    "img": "https://raw.githubusercontent.com/openstate/oad-search/master/app/img/sourcelogo/benaki.png",
+    "url": "http://www.benaki.gr/",
+    "sources": [
+      "benaki"
+    ],
+    "uri": "benaki"
   }
 ]
